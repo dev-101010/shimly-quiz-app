@@ -334,6 +334,22 @@
         <button class="primary small" type="button" id="doRestart" data-t="restartNow"></button>
       </div>
 
+      <h2 data-t="groupData"></h2>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="clearCache"></span>
+          <span class="hint" data-t="clearCacheHint"></span>
+        </div>
+        <button class="small" type="button" id="clearCache" data-t="clearCacheAction"></button>
+      </div>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="clearData"></span>
+          <span class="hint" data-t="clearDataHint"></span>
+        </div>
+        <button class="small" type="button" id="clearData" data-t="clearDataAction"></button>
+      </div>
+
       <h2 data-t="groupInfo"></h2>
       <dl>
         <div><dt data-t="infoVersion"></dt><dd id="i-version"></dd></div>
@@ -440,6 +456,23 @@
         zoom.value = String(cfg.zoomFactor);
         showZoom(cfg.zoomFactor);
       });
+
+      // Kurze Rückmeldung am Knopf – sonst sieht man nicht, dass etwas passiert ist.
+      function withFeedback(button, run) {
+        button.addEventListener("click", async () => {
+          const label = button.textContent;
+          button.disabled = true;
+          const ok = await run();
+          button.textContent = ok ? t.done : label;
+          setTimeout(() => {
+            button.textContent = label;
+            button.disabled = false;
+          }, 1600);
+        });
+      }
+
+      withFeedback(document.getElementById("clearCache"), () => api.clearCache());
+      withFeedback(document.getElementById("clearData"), () => api.clearData());
 
       document.getElementById("reveal").addEventListener("click", () => api.revealConfig());
       document.getElementById("doRestart").addEventListener("click", () => api.relaunch());

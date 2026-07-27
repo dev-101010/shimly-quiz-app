@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('settingsApi', {
   read: () => ipcRenderer.invoke('settings:read'),
   write: (patch) => ipcRenderer.invoke('settings:write', patch),
   revealConfig: () => ipcRenderer.invoke('settings:reveal-config'),
+  clearCache: () => ipcRenderer.invoke('settings:clear-cache'),
+  clearData: () => ipcRenderer.invoke('settings:clear-data'),
   relaunch: () => ipcRenderer.send('settings:relaunch'),
   close: () => ipcRenderer.send('settings:close'),
   onChanged: (fn) => ipcRenderer.on('settings:changed', (_event, cfg) => fn(cfg)),

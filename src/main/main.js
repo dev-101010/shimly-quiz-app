@@ -342,6 +342,20 @@ function applySettings(patch, next) {
   if ('zoomFactor' in patch && live) live.webContents.setZoomFactor(next.zoomFactor);
 }
 
+/**
+ * Meldet ab und räumt die Partition leer: Cookies, LocalStorage, IndexedDB,
+ * Service Worker und den Zwischenspeicher. Die settings.json bleibt unberührt,
+ * die liegt ausserhalb der Session.
+ */
+async function clearBrowsingData() {
+  const ses = session.fromPartition(PARTITION);
+  await ses.clearStorageData();
+  await ses.clearCache();
+  // Frisch laden statt neu laden – nach dem Abmelden ist die alte Adresse
+  // womöglich nicht mehr erreichbar.
+  if (mainWindow && !mainWindow.isDestroyed()) loadSite(mainWindow);
+}
+
 function setDisplaySleepBlocked(on) {
   const running = powerBlockerId !== null && powerSaveBlocker.isStarted(powerBlockerId);
   if (on && !running) {
@@ -381,7 +395,11 @@ if (!app.requestSingleInstanceLock()) {
     }
   });
 
-  settingsWindow.registerIpc(applySettings);
+  settingsWindow.registerIpc({
+    applySettings,
+    clearCache: () => session.fromPartition(PARTITION).clearCache(),
+    clearData: clearBrowsingData,
+  });
 
   app.whenReady().then(() => {
     app.setAppUserModelId('de.shimly.quiz');

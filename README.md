@@ -181,6 +181,15 @@ nächsten Start, und die beiden Chromium-Schalter (`uncapFrameRate`,
 geändert, blendet der Dialog einen Hinweis samt „Jetzt neu starten" ein — und
 zwar so lange, bis der Prozess wirklich neu gestartet wurde.
 
+Unter **Daten** stehen zwei Aufräumaktionen, bewusst getrennt:
+
+- **Zwischenspeicher leeren** — wirft nur den Cache weg, etwa bei hängenden
+  Bildern oder veralteten Skripten. Die Anmeldung bleibt bestehen.
+- **Alle Daten löschen** — entfernt zusätzlich Cookies, LocalStorage,
+  IndexedDB und Service Worker der Partition `persist:shimly`. Das meldet ab,
+  fragt deshalb vorher nach und lädt die Seite anschliessend neu. Die
+  `settings.json` bleibt unberührt, die liegt ausserhalb der Session.
+
 Wer die Datei lieber direkt bearbeitet: sie wird beim ersten Start angelegt.
 
 | Plattform | Pfad |

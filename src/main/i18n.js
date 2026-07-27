@@ -59,6 +59,7 @@ const de = {
     groupWindow: 'Fenster',
     groupPerformance: 'Leistung',
     groupControls: 'Bedienung',
+    groupData: 'Daten',
     groupInfo: 'Informationen',
 
     startFullscreen: 'Vollbild beim Start',
@@ -76,6 +77,20 @@ const de = {
 
     restartNotice: 'Diese Änderung greift erst nach einem Neustart der App.',
     restartNow: 'Jetzt neu starten',
+
+    clearCache: 'Zwischenspeicher leeren',
+    clearCacheHint: 'Lädt Bilder und Skripte neu. Die Anmeldung bleibt bestehen.',
+    clearCacheAction: 'Leeren',
+    clearData: 'Alle Daten löschen',
+    clearDataHint: 'Entfernt Cookies und gespeicherte Daten — du wirst abgemeldet.',
+    clearDataAction: 'Löschen',
+    confirmTitle: 'Alle Daten löschen?',
+    confirmDetail:
+      'Cookies, Anmeldung und lokal gespeicherte Daten von shimly-quiz.de werden entfernt. ' +
+      'Die Einstellungen dieser App bleiben erhalten.',
+    confirmYes: 'Löschen',
+    confirmNo: 'Abbrechen',
+    done: 'Erledigt',
 
     infoVersion: 'Version',
     infoElectron: 'Electron',
@@ -141,6 +156,7 @@ const en = {
     groupWindow: 'Window',
     groupPerformance: 'Performance',
     groupControls: 'Controls',
+    groupData: 'Data',
     groupInfo: 'Information',
 
     startFullscreen: 'Start in full screen',
@@ -158,6 +174,20 @@ const en = {
 
     restartNotice: 'This change takes effect after restarting the app.',
     restartNow: 'Restart now',
+
+    clearCache: 'Clear cache',
+    clearCacheHint: 'Reloads images and scripts. You stay signed in.',
+    clearCacheAction: 'Clear',
+    clearData: 'Clear all data',
+    clearDataHint: 'Removes cookies and stored data — you will be signed out.',
+    clearDataAction: 'Delete',
+    confirmTitle: 'Clear all data?',
+    confirmDetail:
+      'Cookies, your sign-in and locally stored data from shimly-quiz.de will be removed. ' +
+      'The settings of this app are kept.',
+    confirmYes: 'Delete',
+    confirmNo: 'Cancel',
+    done: 'Done',
 
     infoVersion: 'Version',
     infoElectron: 'Electron',

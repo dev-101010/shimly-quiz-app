@@ -7,7 +7,7 @@
  */
 
 const path = require('path');
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, shell } = require('electron');
 
 const config = require('./config');
 const i18n = require('./i18n');
@@ -89,11 +89,16 @@ function notifyChanged(cfg) {
 }
 
 /**
- * @param {(patch: object, next: object) => void} onChange
+ * @param {object} actions
+ * @param {(patch: object, next: object) => void} actions.applySettings
  *   Wird nach dem Speichern aufgerufen, damit der Hauptprozess die Änderungen
  *   anwendet, die sofort greifen können.
+ * @param {() => Promise<void>} actions.clearCache
+ * @param {() => Promise<void>} actions.clearData
+ *   Beide gehören in den Hauptprozess, weil dort die Session des Fensters liegt.
  */
-function registerIpc(onChange) {
+function registerIpc(actions) {
+  const onChange = actions.applySettings;
   const atStart = config.load();
   for (const key of NEEDS_RESTART) startup[key] = atStart[key];
 
@@ -112,6 +117,30 @@ function registerIpc(onChange) {
   ipcMain.handle('settings:reveal-config', () => {
     config.save({}); // legt die Datei an, falls noch nie gespeichert wurde
     shell.showItemInFolder(config.configPath());
+  });
+
+  ipcMain.handle('settings:clear-cache', async () => {
+    await actions.clearCache();
+    return true;
+  });
+
+  // Rückfrage, weil das die Anmeldung mitnimmt und nicht umkehrbar ist.
+  ipcMain.handle('settings:clear-data', async (event) => {
+    const t = i18n.strings().settings;
+    const sender = BrowserWindow.fromWebContents(event.sender);
+    const { response } = await dialog.showMessageBox(sender, {
+      type: 'warning',
+      buttons: [t.confirmYes, t.confirmNo],
+      defaultId: 1, // Abbrechen vorausgewählt
+      cancelId: 1,
+      message: t.confirmTitle,
+      detail: t.confirmDetail,
+      noLink: true,
+    });
+    if (response !== 0) return false;
+
+    await actions.clearData();
+    return true;
   });
 
   ipcMain.on('settings:relaunch', () => {
