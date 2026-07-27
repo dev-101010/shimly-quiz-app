@@ -76,7 +76,9 @@ function template(actions) {
       { type: 'separator' },
       item(t.back, isMac ? 'Cmd+Left' : 'Alt+Left', actions.back),
       { type: 'separator' },
-      item(t.zoomIn, 'CmdOrCtrl++', actions.zoomIn),
+      // "CmdOrCtrl++" laesst sich nicht zerlegen – nach dem Trennen am Plus
+      // bleibt kein Tastenname uebrig, und das Kuerzel wird gar nicht angezeigt.
+      item(t.zoomIn, 'CmdOrCtrl+Plus', actions.zoomIn),
       item(t.zoomOut, 'CmdOrCtrl+-', actions.zoomOut),
       item(t.zoomReset, 'CmdOrCtrl+0', actions.zoomReset),
       { type: 'separator' },
