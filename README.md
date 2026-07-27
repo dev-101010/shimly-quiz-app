@@ -183,8 +183,11 @@ zwar so lange, bis der Prozess wirklich neu gestartet wurde.
 
 Unter **Daten** stehen zwei Aufräumaktionen, bewusst getrennt:
 
-- **Zwischenspeicher leeren** — wirft nur den Cache weg, etwa bei hängenden
-  Bildern oder veralteten Skripten. Die Anmeldung bleibt bestehen.
+- **Zwischenspeicher leeren** — bei hängenden Bildern oder veralteten
+  Skripten. Räumt zwei getrennte Töpfe: den HTTP-Cache und `cachestorage`,
+  aus dem der Service Worker der Seite seine Dateien ausliefert. Der zweite
+  ist der weitaus grössere; ohne ihn bliebe die Seite trotz „geleert" auf
+  altem Stand. Die Anmeldung bleibt bestehen.
 - **Alle Daten löschen** — entfernt zusätzlich Cookies, LocalStorage,
   IndexedDB und Service Worker der Partition `persist:shimly`. Das meldet ab,
   fragt deshalb vorher nach und lädt die Seite anschliessend neu. Die

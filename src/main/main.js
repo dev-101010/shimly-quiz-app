@@ -343,6 +343,20 @@ function applySettings(patch, next) {
 }
 
 /**
+ * Leert nur Zwischenspeicher, ohne abzumelden.
+ *
+ * Zwei getrennte Töpfe: `clearCache` räumt den HTTP-Cache, `cachestorage` ist
+ * der Speicher der Cache-API, aus dem ein Service Worker seine Dateien
+ * ausliefert. Der ist bei shimly-quiz.de der weitaus grössere — ohne ihn
+ * bliebe die Seite trotz "geleert" auf altem Stand.
+ */
+async function clearCaches() {
+  const ses = session.fromPartition(PARTITION);
+  await ses.clearCache();
+  await ses.clearStorageData({ storages: ['cachestorage', 'shadercache'] });
+}
+
+/**
  * Meldet ab und räumt die Partition leer: Cookies, LocalStorage, IndexedDB,
  * Service Worker und den Zwischenspeicher. Die settings.json bleibt unberührt,
  * die liegt ausserhalb der Session.
@@ -397,7 +411,7 @@ if (!app.requestSingleInstanceLock()) {
 
   settingsWindow.registerIpc({
     applySettings,
-    clearCache: () => session.fromPartition(PARTITION).clearCache(),
+    clearCache: clearCaches,
     clearData: clearBrowsingData,
   });
 
