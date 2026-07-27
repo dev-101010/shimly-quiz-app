@@ -31,12 +31,18 @@ Artefakte in `dist/`:
 
 | Plattform | Datei | Anmerkung |
 | --- | --- | --- |
-| Windows | `Shimly_Quiz_Setup_<version>.exe` | Installer, pro Benutzer, keine Adminrechte |
-| Windows | `Shimly_Quiz_portable_<version>.exe` | läuft ohne Installation |
-| Linux | `Shimly_Quiz_<version>_x86_64.AppImage` | ausführbar machen, direkt starten |
-| Linux | `Shimly_Quiz_<version>_amd64.deb` | Debian/Ubuntu |
-| macOS | `Shimly_Quiz_<version>_<arch>.dmg` | je einmal `arm64` und `x64` |
-| macOS | `Shimly_Quiz_<version>_<arch>.zip` | für Auto-Update/manuelles Entpacken |
+| Windows | `Shimly_Quiz_Setup_<version>_windows_x64.exe` | Installer, pro Benutzer, keine Adminrechte |
+| Windows | `Shimly_Quiz_portable_<version>_windows_x64.exe` | läuft ohne Installation |
+| Linux | `Shimly_Quiz_<version>_linux_x86_64.AppImage` | ausführbar machen, direkt starten |
+| Linux | `Shimly_Quiz_<version>_linux_amd64.deb` | Debian/Ubuntu |
+| macOS | `Shimly_Quiz_<version>_macOS_arm64.dmg` | Apple Silicon |
+| macOS | `Shimly_Quiz_<version>_macOS_x64.dmg` | Intel-Macs |
+
+Die Plattform steht im Namen, weil die Endung allein nicht überall reicht — bei
+`.exe`, `.deb` und `.dmg` schon, bei einem ZIP nicht. Ein `zip`-Ziel für macOS
+gibt es deshalb nicht mehr: Es wäre nur für automatische Updates über
+`electron-updater` nötig, das hier niemand nutzt, hätte aber als einzige Datei
+ohne erkennbare Plattform dagestanden.
 
 Dateien, Ordner und Verknüpfungen heissen durchgehend `Shimly_Quiz`; der Zusatz
 „(Third Party)" steht ausschliesslich im Fenstertitel.

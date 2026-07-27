@@ -1,7 +1,7 @@
 {
   "name": "shimly-quiz",
   "productName": "Shimly_Quiz",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Shimly Quiz als native Desktop-App mit eingebettetem Browser",
   "main": "src/main/main.js",
   "author": "Dennis Drochmann",
@@ -52,10 +52,10 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Shimly_Quiz",
-      "artifactName": "Shimly_Quiz_Setup_${version}.exe"
+      "artifactName": "Shimly_Quiz_Setup_${version}_windows_${arch}.exe"
     },
     "portable": {
-      "artifactName": "Shimly_Quiz_portable_${version}.exe"
+      "artifactName": "Shimly_Quiz_portable_${version}_windows_${arch}.exe"
     },
     "linux": {
       "target": [
@@ -76,7 +76,7 @@
       "category": "Game",
       "synopsis": "Shimly Quiz als Desktop-App",
       "maintainer": "Dennis Drochmann <dennis.drochmann@gmail.com>",
-      "artifactName": "Shimly_Quiz_${version}_${arch}.${ext}",
+      "artifactName": "Shimly_Quiz_${version}_linux_${arch}.${ext}",
       "desktop": {
         "entry": {
           "StartupWMClass": "shimly_quiz"
@@ -91,18 +91,11 @@
             "arm64",
             "x64"
           ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "arm64",
-            "x64"
-          ]
         }
       ],
       "icon": "build/icon.png",
       "category": "public.app-category.games",
-      "artifactName": "Shimly_Quiz_${version}_${arch}.${ext}",
+      "artifactName": "Shimly_Quiz_${version}_macOS_${arch}.${ext}",
       "darkModeSupport": true,
       "identity": "-",
       "hardenedRuntime": false,

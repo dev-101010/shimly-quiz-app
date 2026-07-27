@@ -37,7 +37,6 @@ jobs:
             target: --mac
             artifacts: |
               dist/*.dmg
-              dist/*.zip
 
     steps:
       - uses: actions/checkout@v4
