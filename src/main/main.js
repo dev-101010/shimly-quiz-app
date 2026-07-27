@@ -13,6 +13,7 @@ const {
 
 const config = require('./config');
 const settingsWindow = require('./settings-window');
+const aboutWindow = require('./about-window');
 const menu = require('./menu');
 const i18n = require('./i18n');
 
@@ -214,6 +215,7 @@ function installMenu() {
 
   menu.install({
     settings: onMain((win) => settingsWindow.open(win)),
+    about: onMain((win) => aboutWindow.open(win)),
     reload: onMain((win) => reload(win, false)),
     hardReload: onMain((win) => reload(win, true)),
     back: onMain((win) => {
@@ -408,6 +410,8 @@ if (!app.requestSingleInstanceLock()) {
       powerSaveBlocker.stop(powerBlockerId);
     }
   });
+
+  aboutWindow.registerIpc();
 
   settingsWindow.registerIpc({
     applySettings,

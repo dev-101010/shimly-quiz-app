@@ -165,9 +165,14 @@ Menüpunkte zeigen ihr Kürzel deshalb nur an und registrieren es nicht
 ## Einstellungen
 
 Über **Datei → Einstellungen…** (bzw. `Strg+,`) öffnet sich ein eigenes Fenster
-mit allen Optionen und den Programminfos: Version, Electron-, Chromium- und
-Node-Stand, Plattform, Zielseite, erlaubte Hosts und der Pfad zur
-`settings.json` samt Knopf, der den Ordner öffnet.
+mit allen Optionen, den Aufräumaktionen und dem Pfad zur `settings.json` samt
+Knopf, der den Ordner öffnet.
+
+Reine Angaben zum Programm stehen getrennt davon unter **Hilfe → Über** (unter
+macOS im App-Menü): Version, Electron-, Chromium- und Node-Stand, Plattform,
+Zielseite, erlaubte Hosts und der Hinweis, dass dies ein inoffizieller Client
+ist. Die Trennung ist Absicht — in den Einstellungen lässt sich etwas ändern,
+im Über-Fenster gibt es nichts zu drehen.
 
 Die Menüleiste ist dauerhaft sichtbar und verschwindet nur im Vollbild. Unter
 macOS liegt das Menü in der Systemleiste; dort ist es Pflicht, weil sonst
@@ -249,8 +254,12 @@ src/main/menu.js             Anwendungsmenü (am Fenster, unter macOS global)
 src/main/i18n.js             Oberflächentexte deutsch/englisch nach Systemsprache
 src/main/settings-window.js  Einstellungsfenster + zugehörige IPC-Kanäle
 src/main/settings-preload.js Brücke für das Einstellungsfenster
+src/main/about-window.js     Über-Fenster + zugehörige IPC-Kanäle
+src/main/about-preload.js    Brücke für das Über-Fenster
+src/main/app-info.js         Version, Unterbau und Zielseite als Lesewerte
 src/renderer/splash.html     Lade- und Fehlerbildschirm
-src/renderer/settings.html   Einstellungen und Programminfos
+src/renderer/settings.html   Einstellungen
+src/renderer/about.html      Über-Fenster
 src/renderer/logo.png        Motiv für beide Seiten
 src/renderer/icon.png        Fenster-Icon (256 px)
 scripts/fetch-icons.js       lädt die Original-Icons nach build/source/

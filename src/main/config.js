@@ -6,6 +6,7 @@ const { app } = require('electron');
 
 const APP_TITLE = 'Shimly Quiz (Third Party)';
 const APP_URL = 'https://www.shimly-quiz.de/';
+const REPO_URL = 'https://github.com/dev-101010/shimly-quiz-app';
 
 // Nur diese Hosts werden im Fenster geöffnet. Alles andere geht in den
 // Standardbrowser des Systems.
@@ -80,6 +81,7 @@ function isAllowedUrl(url) {
 module.exports = {
   APP_TITLE,
   APP_URL,
+  REPO_URL,
   ALLOWED_HOSTS,
   DEFAULTS,
   load,

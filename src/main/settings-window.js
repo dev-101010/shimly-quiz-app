@@ -25,19 +25,6 @@ let win = null;
 // damit der Hinweis auch nach Schliessen und erneutem Öffnen stehen bleibt.
 const startup = {};
 
-function systemInfo() {
-  return {
-    version: app.getVersion(),
-    electron: process.versions.electron,
-    chrome: process.versions.chrome,
-    node: process.versions.node,
-    platform: `${process.platform}-${process.arch}`,
-    url: config.APP_URL,
-    hosts: config.ALLOWED_HOSTS.join(', '),
-    configPath: config.configPath(),
-  };
-}
-
 function open(parent) {
   if (win && !win.isDestroyed()) {
     if (win.isMinimized()) win.restore();
@@ -104,7 +91,7 @@ function registerIpc(actions) {
 
   ipcMain.handle('settings:read', () => ({
     config: config.load(),
-    info: systemInfo(),
+    configPath: config.configPath(),
     startup,
   }));
 

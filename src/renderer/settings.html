@@ -198,6 +198,14 @@
         flex: 1;
       }
 
+      .path {
+        font-family: "Cascadia Mono", Consolas, monospace;
+        font-size: 11px;
+        overflow-wrap: anywhere;
+        user-select: text;
+        -webkit-user-select: text;
+      }
+
       /* Infos */
       dl {
         margin: 0;
@@ -232,17 +240,10 @@
 
       footer {
         display: flex;
-        align-items: center;
-        gap: 12px;
+        justify-content: flex-end;
         padding: 14px 22px;
         border-top: 1px solid var(--line);
         background: rgba(0, 0, 0, 0.22);
-      }
-      footer p {
-        flex: 1;
-        margin: 0;
-        font-size: 12px;
-        color: var(--muted);
       }
 
       [hidden] {
@@ -349,34 +350,16 @@
         </div>
         <button class="small" type="button" id="clearData" data-t="clearDataAction"></button>
       </div>
-
-      <h2 data-t="groupInfo"></h2>
-      <dl>
-        <div><dt data-t="infoVersion"></dt><dd id="i-version"></dd></div>
-        <div><dt data-t="infoElectron"></dt><dd id="i-electron"></dd></div>
-        <div><dt data-t="infoChrome"></dt><dd id="i-chrome"></dd></div>
-        <div><dt data-t="infoNode"></dt><dd id="i-node"></dd></div>
-        <div><dt data-t="infoPlatform"></dt><dd id="i-platform"></dd></div>
-        <div><dt data-t="infoUrl"></dt><dd id="i-url" class="mono"></dd></div>
-        <div><dt data-t="infoHosts"></dt><dd id="i-hosts" class="mono"></dd></div>
-        <div>
-          <dt data-t="infoConfig"></dt>
-          <dd>
-            <span id="i-configPath" class="mono"></span><br />
-            <button
-              class="small"
-              type="button"
-              id="reveal"
-              style="margin-top: 7px"
-              data-t="revealFolder"
-            ></button>
-          </dd>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="configFile"></span>
+          <span class="hint"><span id="configPath" class="path"></span></span>
         </div>
-      </dl>
+        <button class="small" type="button" id="reveal" data-t="revealFolder"></button>
+      </div>
     </main>
 
     <footer>
-      <p data-t="disclaimer"></p>
       <button type="button" id="close" data-t="close"></button>
     </footer>
 
@@ -424,15 +407,11 @@
         showZoom(cfg.zoomFactor);
       }
 
-      api.read().then(({ config, info, startup: atStart }) => {
+      api.read().then(({ config, configPath, startup: atStart }) => {
         startup = atStart;
         fill(config);
         refreshRestartHint();
-
-        for (const [key, value] of Object.entries(info)) {
-          const el = document.getElementById("i-" + key);
-          if (el) el.textContent = value;
-        }
+        document.getElementById("configPath").textContent = configPath;
       });
 
       for (const key of TOGGLES) {

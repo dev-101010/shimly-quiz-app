@@ -60,7 +60,6 @@ const de = {
     groupPerformance: 'Leistung',
     groupControls: 'Bedienung',
     groupData: 'Daten',
-    groupInfo: 'Informationen',
 
     startFullscreen: 'Vollbild beim Start',
     startFullscreenHint: 'Gilt ab dem nächsten Start. Umschalten jederzeit mit F11.',
@@ -92,18 +91,24 @@ const de = {
     confirmNo: 'Abbrechen',
     done: 'Erledigt',
 
-    infoVersion: 'Version',
-    infoElectron: 'Electron',
-    infoChrome: 'Chromium',
-    infoNode: 'Node',
-    infoPlatform: 'Plattform',
-    infoUrl: 'Zielseite',
-    infoHosts: 'Erlaubte Hosts',
-    infoConfig: 'Einstellungen',
+    configFile: 'Einstellungsdatei',
     revealFolder: 'Ordner öffnen',
 
+    close: 'Schliessen',
+  },
+
+  about: {
+    title: 'Über',
+    version: 'Version',
+    electron: 'Electron',
+    chrome: 'Chromium',
+    node: 'Node',
+    platform: 'Plattform',
+    url: 'Zielseite',
+    hosts: 'Erlaubte Hosts',
     disclaimer:
       'Inoffizieller Client für shimly-quiz.de. Nicht mit dem Betreiber der Seite verbunden.',
+    repo: 'Projektseite öffnen',
     close: 'Schliessen',
   },
 };
@@ -157,7 +162,6 @@ const en = {
     groupPerformance: 'Performance',
     groupControls: 'Controls',
     groupData: 'Data',
-    groupInfo: 'Information',
 
     startFullscreen: 'Start in full screen',
     startFullscreenHint: 'Applies from the next start. Toggle any time with F11.',
@@ -189,17 +193,23 @@ const en = {
     confirmNo: 'Cancel',
     done: 'Done',
 
-    infoVersion: 'Version',
-    infoElectron: 'Electron',
-    infoChrome: 'Chromium',
-    infoNode: 'Node',
-    infoPlatform: 'Platform',
-    infoUrl: 'Target site',
-    infoHosts: 'Allowed hosts',
-    infoConfig: 'Settings file',
+    configFile: 'Settings file',
     revealFolder: 'Open folder',
 
+    close: 'Close',
+  },
+
+  about: {
+    title: 'About',
+    version: 'Version',
+    electron: 'Electron',
+    chrome: 'Chromium',
+    node: 'Node',
+    platform: 'Platform',
+    url: 'Target site',
+    hosts: 'Allowed hosts',
     disclaimer: 'Unofficial client for shimly-quiz.de. Not affiliated with the site operator.',
+    repo: 'Open project page',
     close: 'Close',
   },
 };

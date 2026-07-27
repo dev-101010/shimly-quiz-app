@@ -32,7 +32,7 @@ function template(actions) {
     // dieses Label ist dort nur ein Platzhalter.
     label: config.APP_TITLE,
     submenu: [
-      { label: about, click: actions.settings },
+      { label: about, click: actions.about },
       { type: 'separator' },
       item(t.settings, 'Cmd+,', actions.settings),
       { type: 'separator' },
@@ -95,7 +95,7 @@ function template(actions) {
 
   const helpMenu = {
     label: t.help,
-    submenu: [{ label: about, click: actions.settings }],
+    submenu: [{ label: about, click: actions.about }],
   };
 
   return isMac ? [appMenu, editMenu, viewMenu, windowMenu] : [fileMenu, viewMenu, helpMenu];
