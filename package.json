@@ -1,8 +1,8 @@
 {
   "name": "shimly-quiz",
   "productName": "Shimly_Quiz",
-  "version": "1.0.0",
-  "description": "Shimly Quiz als native Windows-App mit eingebettetem Browser",
+  "version": "1.1.0",
+  "description": "Shimly Quiz als native Desktop-App mit eingebettetem Browser",
   "main": "src/main/main.js",
   "author": "Dennis Drochmann",
   "license": "UNLICENSED",
@@ -12,9 +12,10 @@
     "dev": "set ELECTRON_RUN_AS_NODE=&& electron . --dev",
     "icon": "set ELECTRON_RUN_AS_NODE=&& electron scripts/make-icon.js",
     "icon:fetch": "node scripts/fetch-icons.js",
-    "cert": "set PSModulePath=&& powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-cert.ps1",
     "dist": "electron-builder --win",
-    "pack": "electron-builder --win --dir"
+    "dist:linux": "electron-builder --linux",
+    "dist:mac": "electron-builder --mac",
+    "pack": "electron-builder --dir"
   },
   "build": {
     "appId": "de.shimly.quiz",
@@ -42,14 +43,7 @@
           ]
         }
       ],
-      "icon": "build/icon.ico",
-      "signtoolOptions": {
-        "certificateSubjectName": "Dennis Drochmann",
-        "signingHashAlgorithms": [
-          "sha256"
-        ],
-        "rfc3161TimeStampServer": "http://timestamp.digicert.com"
-      }
+      "icon": "build/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -62,6 +56,57 @@
     },
     "portable": {
       "artifactName": "Shimly_Quiz_portable_${version}.exe"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "Game",
+      "synopsis": "Shimly Quiz als Desktop-App",
+      "maintainer": "Dennis Drochmann <dennis.drochmann@gmail.com>",
+      "artifactName": "Shimly_Quiz_${version}_${arch}.${ext}",
+      "desktop": {
+        "entry": {
+          "StartupWMClass": "shimly_quiz"
+        }
+      }
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.games",
+      "artifactName": "Shimly_Quiz_${version}_${arch}.${ext}",
+      "darkModeSupport": true,
+      "identity": "-",
+      "hardenedRuntime": false,
+      "notarize": false
     }
   },
   "devDependencies": {

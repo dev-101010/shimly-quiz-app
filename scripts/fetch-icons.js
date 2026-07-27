@@ -2,7 +2,8 @@
 
 /**
  * Holt die Original-Icons von shimly-quiz.de nach build/source/.
- * Danach `npm run icon` ausführen, um daraus build/icon.ico zu bauen.
+ * Danach `npm run icon` ausführen, um daraus build/icon.ico und build/icon.png
+ * zu bauen.
  */
 
 const fs = require('fs');
@@ -16,7 +17,9 @@ const ASSETS = [
   '/android-icon-48x48.png',
   '/favicon-96x96.png',
   '/android-icon-144x144.png',
+  '/apple-icon-180x180.png',
   '/android-icon-192x192.png',
+  '/ms-icon-310x310.png',
 ];
 
 const OUT_DIR = path.join(__dirname, '..', 'build', 'source');

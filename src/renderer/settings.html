@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'"
+    />
+    <title>Einstellungen — Shimly Quiz (Third Party)</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c0b0a;
+        --fg: #f2ede2;
+        --muted: #9a917f;
+        --accent: #f2c44e;
+        --accent-2: #c8901b;
+        --line: rgba(255, 255, 255, 0.09);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        background: radial-gradient(120% 90% at 50% 0%, #241d10 0%, var(--bg) 58%);
+        color: var(--fg);
+        font: 14px/1.5 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 22px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      header svg {
+        color: var(--accent);
+        flex: none;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 650;
+        letter-spacing: 0.2px;
+      }
+
+      main {
+        flex: 1;
+        overflow-y: auto;
+        padding: 6px 22px 22px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+      }
+
+      h2 {
+        margin: 22px 0 8px;
+        font-size: 11px;
+        font-weight: 650;
+        letter-spacing: 0.9px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .row:last-child {
+        border-bottom: none;
+      }
+      .row .text {
+        flex: 1;
+        min-width: 0;
+      }
+      .row .name {
+        display: block;
+      }
+      .row .hint {
+        display: block;
+        margin-top: 2px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* Schalter */
+      .switch {
+        flex: none;
+        position: relative;
+        width: 40px;
+        height: 23px;
+      }
+      .switch input {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .track {
+        position: absolute;
+        inset: 0;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.12);
+        transition: background 0.16s ease;
+        pointer-events: none;
+      }
+      .track::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: #cfc7b7;
+        transition: transform 0.16s ease, background 0.16s ease;
+      }
+      .switch input:checked + .track {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .switch input:checked + .track::after {
+        transform: translateX(17px);
+        background: #14110a;
+      }
+      .switch input:focus-visible + .track {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* Zoom */
+      input[type="range"] {
+        flex: none;
+        width: 150px;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+      .value {
+        flex: none;
+        width: 46px;
+        text-align: right;
+        font-family: "Cascadia Mono", Consolas, monospace;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      button {
+        font: inherit;
+        padding: 7px 14px;
+        border-radius: 9px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--fg);
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      button:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      button.primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        border-color: transparent;
+        color: #14110a;
+        font-weight: 600;
+      }
+      button.primary:hover {
+        filter: brightness(1.08);
+      }
+      button.small {
+        padding: 5px 11px;
+        font-size: 12px;
+      }
+
+      /* Neustart-Hinweis */
+      #restart {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 18px;
+        padding: 12px 14px;
+        border: 1px solid rgba(242, 196, 78, 0.32);
+        border-radius: 11px;
+        background: rgba(242, 196, 78, 0.08);
+        font-size: 13px;
+      }
+      #restart span {
+        flex: 1;
+      }
+
+      /* Infos */
+      dl {
+        margin: 0;
+        font-size: 13px;
+      }
+      dl div {
+        display: flex;
+        gap: 14px;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      dl div:last-child {
+        border-bottom: none;
+      }
+      dt {
+        flex: none;
+        width: 132px;
+        color: var(--muted);
+      }
+      dd {
+        margin: 0;
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        user-select: text;
+        -webkit-user-select: text;
+      }
+      dd.mono {
+        font-family: "Cascadia Mono", Consolas, monospace;
+        font-size: 12px;
+      }
+
+      footer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 22px;
+        border-top: 1px solid var(--line);
+        background: rgba(0, 0, 0, 0.22);
+      }
+      footer p {
+        flex: 1;
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+      </svg>
+      <h1 data-t="title"></h1>
+    </header>
+
+    <main>
+      <h2 data-t="groupWindow"></h2>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="startFullscreen"></span>
+          <span class="hint" data-t="startFullscreenHint"></span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="startFullscreen" />
+          <span class="track"></span>
+        </label>
+      </div>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="zoom"></span>
+          <span class="hint" data-t="zoomHint"></span>
+        </div>
+        <input type="range" id="zoomFactor" min="0.4" max="3" step="0.1" />
+        <span class="value" id="zoomValue">100 %</span>
+      </div>
+
+      <h2 data-t="groupPerformance"></h2>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="uncapFrameRate"></span>
+          <span class="hint" data-t="uncapFrameRateHint"></span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="uncapFrameRate" />
+          <span class="track"></span>
+        </label>
+      </div>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="disableHardwareAcceleration"></span>
+          <span class="hint" data-t="disableHardwareAccelerationHint"></span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="disableHardwareAcceleration" />
+          <span class="track"></span>
+        </label>
+      </div>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="preventDisplaySleep"></span>
+          <span class="hint" data-t="preventDisplaySleepHint"></span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="preventDisplaySleep" />
+          <span class="track"></span>
+        </label>
+      </div>
+
+      <h2 data-t="groupControls"></h2>
+      <div class="row">
+        <div class="text">
+          <span class="name" data-t="blockContextMenu"></span>
+          <span class="hint" data-t="blockContextMenuHint"></span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="blockContextMenu" />
+          <span class="track"></span>
+        </label>
+      </div>
+
+      <div id="restart" hidden>
+        <span data-t="restartNotice"></span>
+        <button class="primary small" type="button" id="doRestart" data-t="restartNow"></button>
+      </div>
+
+      <h2 data-t="groupInfo"></h2>
+      <dl>
+        <div><dt data-t="infoVersion"></dt><dd id="i-version"></dd></div>
+        <div><dt data-t="infoElectron"></dt><dd id="i-electron"></dd></div>
+        <div><dt data-t="infoChrome"></dt><dd id="i-chrome"></dd></div>
+        <div><dt data-t="infoNode"></dt><dd id="i-node"></dd></div>
+        <div><dt data-t="infoPlatform"></dt><dd id="i-platform"></dd></div>
+        <div><dt data-t="infoUrl"></dt><dd id="i-url" class="mono"></dd></div>
+        <div><dt data-t="infoHosts"></dt><dd id="i-hosts" class="mono"></dd></div>
+        <div>
+          <dt data-t="infoConfig"></dt>
+          <dd>
+            <span id="i-configPath" class="mono"></span><br />
+            <button
+              class="small"
+              type="button"
+              id="reveal"
+              style="margin-top: 7px"
+              data-t="revealFolder"
+            ></button>
+          </dd>
+        </div>
+      </dl>
+    </main>
+
+    <footer>
+      <p data-t="disclaimer"></p>
+      <button type="button" id="close" data-t="close"></button>
+    </footer>
+
+    <script>
+      const api = window.settingsApi;
+
+      // Beschriftungen setzen, bevor irgendetwas sichtbar wird.
+      const t = api.t.settings;
+      document.documentElement.lang = api.t.lang;
+      for (const el of document.querySelectorAll("[data-t]")) {
+        el.textContent = t[el.dataset.t];
+      }
+
+      const TOGGLES = [
+        "startFullscreen",
+        "uncapFrameRate",
+        "disableHardwareAcceleration",
+        "preventDisplaySleep",
+        "blockContextMenu",
+      ];
+
+      const zoom = document.getElementById("zoomFactor");
+      const zoomValue = document.getElementById("zoomValue");
+      const restart = document.getElementById("restart");
+
+      // Werte der Chromium-Schalter beim Programmstart. Verglichen wird dagegen
+      // und nicht gegen den zuletzt gespeicherten Stand, sonst verschwände der
+      // Neustart-Hinweis beim erneuten Öffnen des Dialogs.
+      let startup = {};
+
+      function showZoom(factor) {
+        zoomValue.textContent = Math.round(factor * 100) + " %";
+      }
+
+      function refreshRestartHint() {
+        const pending = Object.keys(startup).some(
+          (key) => document.getElementById(key).checked !== startup[key],
+        );
+        restart.hidden = !pending;
+      }
+
+      function fill(cfg) {
+        for (const key of TOGGLES) document.getElementById(key).checked = Boolean(cfg[key]);
+        zoom.value = String(cfg.zoomFactor);
+        showZoom(cfg.zoomFactor);
+      }
+
+      api.read().then(({ config, info, startup: atStart }) => {
+        startup = atStart;
+        fill(config);
+        refreshRestartHint();
+
+        for (const [key, value] of Object.entries(info)) {
+          const el = document.getElementById("i-" + key);
+          if (el) el.textContent = value;
+        }
+      });
+
+      for (const key of TOGGLES) {
+        document.getElementById(key).addEventListener("change", (event) => {
+          api.write({ [key]: event.target.checked });
+          refreshRestartHint();
+        });
+      }
+
+      zoom.addEventListener("input", () => {
+        // Sofort anzeigen, aber erst beim Loslassen speichern – sonst schreibt
+        // jedes Zwischenbild die settings.json.
+        showZoom(Number(zoom.value));
+      });
+      zoom.addEventListener("change", () => {
+        api.write({ zoomFactor: Number(zoom.value) });
+      });
+
+      // Zoom kann auch per Strg +/− im Hauptfenster geändert werden.
+      api.onChanged((cfg) => {
+        zoom.value = String(cfg.zoomFactor);
+        showZoom(cfg.zoomFactor);
+      });
+
+      document.getElementById("reveal").addEventListener("click", () => api.revealConfig());
+      document.getElementById("doRestart").addEventListener("click", () => api.relaunch());
+      document.getElementById("close").addEventListener("click", () => api.close());
+
+      addEventListener("keydown", (event) => {
+        if (event.key === "Escape") api.close();
+      });
+    </script>
+  </body>
+</html>

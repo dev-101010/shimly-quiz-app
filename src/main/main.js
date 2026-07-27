@@ -12,6 +12,9 @@ const {
 } = require('electron');
 
 const config = require('./config');
+const settingsWindow = require('./settings-window');
+const menu = require('./menu');
+const i18n = require('./i18n');
 
 if (!app) {
   // Passiert nur, wenn ELECTRON_RUN_AS_NODE gesetzt ist (z. B. im VSCode-Terminal):
@@ -25,9 +28,11 @@ if (!app) {
 }
 
 const isDev = process.argv.includes('--dev');
+const isMac = process.platform === 'darwin';
 const cfg = config.load();
 
 const SPLASH = path.join(__dirname, '..', 'renderer', 'splash.html');
+const ICON = path.join(__dirname, '..', 'renderer', 'icon.png');
 const PARTITION = 'persist:shimly'; // Cookies/Login/LocalStorage überleben Neustarts
 
 let mainWindow = null;
@@ -144,8 +149,12 @@ function hardenNavigation(contents) {
 function attachShortcuts(win) {
   win.webContents.on('before-input-event', (event, input) => {
     if (input.type !== 'keyDown') return;
-    const { control, alt, shift, key } = input;
+    const { alt, shift, key } = input;
     const k = (key || '').toLowerCase();
+
+    // Auf macOS liegen dieselben Kürzel auf Cmd, und Zurück ist Cmd+← statt Alt+←.
+    const control = isMac ? input.meta : input.control;
+    const back = isMac ? control : alt;
 
     const consume = (fn) => {
       event.preventDefault();
@@ -158,13 +167,14 @@ function attachShortcuts(win) {
     if (control && (k === '0' || k === 'numpad0')) return consume(() => setZoom(win, 1));
     if (control && (k === '+' || k === '=')) return consume(() => stepZoom(win, +0.1));
     if (control && (k === '-' || k === '_')) return consume(() => stepZoom(win, -0.1));
-    if (alt && k === 'arrowleft') {
+    if (back && k === 'arrowleft') {
       const history = win.webContents.navigationHistory;
       if (history.canGoBack()) return consume(() => history.goBack());
     }
     if (control && shift && k === 'i') {
       return consume(() => win.webContents.toggleDevTools());
     }
+    if (control && k === ',') return consume(() => settingsWindow.open(win));
 
     // Ctrl+W / Ctrl+Shift+W schließen sonst mitten im Quiz das Fenster.
     if (control && k === 'w') event.preventDefault();
@@ -173,7 +183,8 @@ function attachShortcuts(win) {
 
 function setFullScreen(win, on) {
   win.setFullScreen(on);
-  win.setMenuBarVisibility(false);
+  // Im Vollbild stört die Menüleiste; danach muss sie wieder auftauchen.
+  win.setMenuBarVisibility(!on);
 }
 
 function reload(win, hard) {
@@ -184,11 +195,37 @@ function reload(win, hard) {
 function setZoom(win, factor) {
   const clamped = Math.min(3, Math.max(0.4, Number(factor.toFixed(2))));
   win.webContents.setZoomFactor(clamped);
-  config.save({ zoomFactor: clamped });
+  settingsWindow.notifyChanged(config.save({ zoomFactor: clamped }));
 }
 
 function stepZoom(win, delta) {
   setZoom(win, win.webContents.getZoomFactor() + delta);
+}
+
+/* ------------------------------------------------------------------ *
+ * Menü – greift auf dieselben Funktionen zu wie die Tastenkürzel.
+ * Alle Punkte zielen bewusst auf das Hauptfenster, auch wenn unter macOS
+ * gerade das Einstellungsfenster den Fokus hat.
+ * ------------------------------------------------------------------ */
+function installMenu() {
+  const onMain = (fn) => () => {
+    if (mainWindow && !mainWindow.isDestroyed()) fn(mainWindow);
+  };
+
+  menu.install({
+    settings: onMain((win) => settingsWindow.open(win)),
+    reload: onMain((win) => reload(win, false)),
+    hardReload: onMain((win) => reload(win, true)),
+    back: onMain((win) => {
+      const history = win.webContents.navigationHistory;
+      if (history.canGoBack()) history.goBack();
+    }),
+    zoomIn: onMain((win) => stepZoom(win, +0.1)),
+    zoomOut: onMain((win) => stepZoom(win, -0.1)),
+    zoomReset: onMain((win) => setZoom(win, 1)),
+    fullscreen: onMain((win) => setFullScreen(win, !win.isFullScreen())),
+    devTools: onMain((win) => win.webContents.toggleDevTools()),
+  });
 }
 
 /* ------------------------------------------------------------------ *
@@ -216,7 +253,7 @@ function createWindow() {
     minHeight: 600,
     show: false,
     backgroundColor: '#0c0b0a',
-    autoHideMenuBar: true,
+    icon: ICON,
     fullscreen: cfg.startFullscreen,
     title: config.APP_TITLE,
     webPreferences: {
@@ -233,7 +270,7 @@ function createWindow() {
   });
 
   // hardenNavigation läuft zentral über app.on('web-contents-created').
-  win.setMenu(null);
+  // Das Menü bleibt dank autoHideMenuBar eingeklappt und kommt erst auf Alt.
   attachShortcuts(win);
 
   // Der Fenstertitel bleibt der App-Titel; die Seite darf ihn nicht ersetzen.
@@ -284,6 +321,37 @@ ipcMain.on('app:quit', () => app.quit());
 
 ipcMain.handle('app:context-menu-blocked', () => cfg.blockContextMenu);
 
+// Oberflächentexte für die Renderer. Bewusst synchron: so stehen die Texte
+// schon beim ersten Rendern fest und nichts springt sichtbar um.
+ipcMain.on('app:strings', (event) => {
+  event.returnValue = i18n.strings();
+});
+
+/**
+ * Übernimmt Änderungen aus dem Einstellungsfenster, soweit sie ohne Neustart
+ * greifen können. `startFullscreen` wirkt erst beim nächsten Start, die
+ * Chromium-Schalter erst nach einem Neustart – darauf weist der Dialog hin.
+ */
+function applySettings(patch, next) {
+  const live = mainWindow && !mainWindow.isDestroyed() ? mainWindow : null;
+
+  if ('preventDisplaySleep' in patch) setDisplaySleepBlocked(next.preventDisplaySleep);
+  if ('blockContextMenu' in patch && live) {
+    live.webContents.send('app:context-menu-blocked', next.blockContextMenu);
+  }
+  if ('zoomFactor' in patch && live) live.webContents.setZoomFactor(next.zoomFactor);
+}
+
+function setDisplaySleepBlocked(on) {
+  const running = powerBlockerId !== null && powerSaveBlocker.isStarted(powerBlockerId);
+  if (on && !running) {
+    powerBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+  } else if (!on && running) {
+    powerSaveBlocker.stop(powerBlockerId);
+    powerBlockerId = null;
+  }
+}
+
 /* ------------------------------------------------------------------ *
  * Lifecycle.
  * ------------------------------------------------------------------ */
@@ -301,7 +369,11 @@ if (!app.requestSingleInstanceLock()) {
   // Muss vor dem ersten Fenster stehen – greift auch für DevTools-Contents.
   app.on('web-contents-created', (_e, contents) => hardenNavigation(contents));
 
-  app.on('window-all-closed', () => app.quit());
+  // Auf macOS bleibt die App üblicherweise im Dock, bis der Benutzer Cmd+Q
+  // drückt; 'activate' baut das Fenster dann wieder auf.
+  app.on('window-all-closed', () => {
+    if (!isMac) app.quit();
+  });
 
   app.on('will-quit', () => {
     if (powerBlockerId !== null && powerSaveBlocker.isStarted(powerBlockerId)) {
@@ -309,12 +381,13 @@ if (!app.requestSingleInstanceLock()) {
     }
   });
 
+  settingsWindow.registerIpc(applySettings);
+
   app.whenReady().then(() => {
     app.setAppUserModelId('de.shimly.quiz');
 
-    if (cfg.preventDisplaySleep) {
-      powerBlockerId = powerSaveBlocker.start('prevent-display-sleep');
-    }
+    installMenu();
+    setDisplaySleepBlocked(cfg.preventDisplaySleep);
 
     mainWindow = createWindow();
 

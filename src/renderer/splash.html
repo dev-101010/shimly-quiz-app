@@ -129,23 +129,29 @@
       <img class="mark" src="logo.png" alt="" aria-hidden="true" />
 
       <section id="loading">
-        <h1>Shimly Quiz wird geladen…</h1>
-        <p>Verbindung zu shimly-quiz.de wird aufgebaut.</p>
+        <h1 data-t="loadingTitle"></h1>
+        <p data-t="loadingText"></p>
         <div class="bar"></div>
       </section>
 
       <section id="error" hidden>
-        <h1>Seite nicht erreichbar</h1>
-        <p id="detail">Bitte Internetverbindung prüfen.</p>
+        <h1 data-t="errorTitle"></h1>
+        <p id="detail" data-t="errorText"></p>
         <p style="margin-top: 6px"><code id="code"></code></p>
         <div class="actions">
-          <button class="primary" id="retry" type="button">Erneut versuchen</button>
-          <button id="quit" type="button">Beenden</button>
+          <button class="primary" id="retry" type="button" data-t="retry"></button>
+          <button id="quit" type="button" data-t="quit"></button>
         </div>
       </section>
     </main>
 
     <script>
+      const t = window.shimlyApp.t.splash;
+      document.documentElement.lang = window.shimlyApp.t.lang;
+      for (const el of document.querySelectorAll("[data-t]")) {
+        el.textContent = t[el.dataset.t];
+      }
+
       const params = new URLSearchParams(location.search);
       const isError = params.get("state") === "error";
 
@@ -155,7 +161,7 @@
       if (isError) {
         const message = params.get("message");
         if (message) document.getElementById("detail").textContent = message;
-        document.getElementById("code").textContent = "Fehlercode " + params.get("code");
+        document.getElementById("code").textContent = t.errorCode + " " + params.get("code");
 
         document.getElementById("retry").addEventListener("click", () => window.shimlyApp.retry());
         document.getElementById("quit").addEventListener("click", () => window.shimlyApp.quit());
