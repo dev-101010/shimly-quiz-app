@@ -162,7 +162,12 @@ function attachShortcuts(win) {
       fn();
     };
 
-    if (k === 'f11') return consume(() => setFullScreen(win, !win.isFullScreen()));
+    // Vollbild: F11 ist die Windows-/Linux-Konvention, macOS nutzt Ctrl+Cmd+F.
+    // F11 bleibt dort zusätzlich erlaubt, liegt aber meist schon auf Mission
+    // Control und erreicht die App dann gar nicht.
+    const fullscreenKey = k === 'f11' || (isMac && input.control && input.meta && k === 'f');
+    if (fullscreenKey) return consume(() => setFullScreen(win, !win.isFullScreen()));
+
     if (k === 'escape' && win.isFullScreen()) return consume(() => setFullScreen(win, false));
     if (k === 'f5' || (control && k === 'r')) return consume(() => reload(win, control && shift));
     if (control && (k === '0' || k === 'numpad0')) return consume(() => setZoom(win, 1));
@@ -172,9 +177,11 @@ function attachShortcuts(win) {
       const history = win.webContents.navigationHistory;
       if (history.canGoBack()) return consume(() => history.goBack());
     }
-    if (control && shift && k === 'i') {
-      return consume(() => win.webContents.toggleDevTools());
-    }
+    // DevTools: Windows/Linux Ctrl+Shift+I oder F12, macOS Cmd+Alt+I.
+    const devToolsKey = isMac
+      ? control && alt && k === 'i'
+      : k === 'f12' || (control && shift && k === 'i');
+    if (devToolsKey) return consume(() => win.webContents.toggleDevTools());
     if (control && k === ',') return consume(() => settingsWindow.open(win));
 
     // Ctrl+W / Ctrl+Shift+W schließen sonst mitten im Quiz das Fenster.

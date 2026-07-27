@@ -82,9 +82,11 @@ function template(actions) {
       item(t.zoomOut, 'CmdOrCtrl+-', actions.zoomOut),
       item(t.zoomReset, 'CmdOrCtrl+0', actions.zoomReset),
       { type: 'separator' },
-      item(t.fullscreen, 'F11', actions.fullscreen),
+      // Jede Plattform bekommt ihr uebliches Kuerzel angezeigt: F11 gibt es
+      // unter macOS nicht als Vollbild, und die DevTools liegen dort auf Alt.
+      item(t.fullscreen, isMac ? 'Control+Cmd+F' : 'F11', actions.fullscreen),
       { type: 'separator' },
-      item(t.devTools, 'CmdOrCtrl+Shift+I', actions.devTools),
+      item(t.devTools, isMac ? 'Cmd+Alt+I' : 'CmdOrCtrl+Shift+I', actions.devTools),
     ],
   };
 

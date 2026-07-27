@@ -134,11 +134,18 @@ minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
 | `Ctrl` `+` / `-` / `0` | Zoom grösser / kleiner / zurücksetzen |
 | `Alt+←` | Zurück |
 | `Ctrl+,` | Einstellungen |
-| `Ctrl+Shift+I` | DevTools |
+| `F12` / `Ctrl+Shift+I` | DevTools |
 
 Auf macOS liegen dieselben Kürzel auf `Cmd` statt `Ctrl`, und Zurück ist
-`Cmd+←`. Ebenfalls macOS-typisch: Das Schliessen des Fensters beendet die App
-nicht — dafür `Cmd+Q`.
+`Cmd+←`. Zwei Ausnahmen, weil `Cmd` dort nicht die Konvention ist:
+
+| Taste (macOS) | Funktion |
+| --- | --- |
+| `Ctrl+Cmd+F` | Vollbild — `F11` liegt dort auf Mission Control |
+| `Cmd+Alt+I` | DevTools — `Alt` statt `Shift`, wie in Safari und Chrome |
+
+Ebenfalls macOS-typisch: Das Schliessen des Fensters beendet die App nicht —
+dafür `Cmd+Q`.
 
 Die Kürzel wertet durchgehend `attachShortcuts` in
 [`src/main/main.js`](src/main/main.js) aus, nicht das Menü: dort hängt die
