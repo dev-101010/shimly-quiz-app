@@ -1,0 +1,71 @@
+{
+  "name": "shimly-quiz",
+  "productName": "Shimly_Quiz",
+  "version": "1.0.0",
+  "description": "Shimly Quiz als native Windows-App mit eingebettetem Browser",
+  "main": "src/main/main.js",
+  "author": "Dennis Drochmann",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "set ELECTRON_RUN_AS_NODE=&& electron .",
+    "dev": "set ELECTRON_RUN_AS_NODE=&& electron . --dev",
+    "icon": "set ELECTRON_RUN_AS_NODE=&& electron scripts/make-icon.js",
+    "icon:fetch": "node scripts/fetch-icons.js",
+    "cert": "set PSModulePath=&& powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-cert.ps1",
+    "dist": "electron-builder --win",
+    "pack": "electron-builder --win --dir"
+  },
+  "build": {
+    "appId": "de.shimly.quiz",
+    "productName": "Shimly_Quiz",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "!**/*.map"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "signtoolOptions": {
+        "certificateSubjectName": "Dennis Drochmann",
+        "signingHashAlgorithms": [
+          "sha256"
+        ],
+        "rfc3161TimeStampServer": "http://timestamp.digicert.com"
+      }
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Shimly_Quiz",
+      "artifactName": "Shimly_Quiz_Setup_${version}.exe"
+    },
+    "portable": {
+      "artifactName": "Shimly_Quiz_portable_${version}.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3"
+  }
+}
