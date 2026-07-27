@@ -52,6 +52,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Shimly_Quiz",
+      "differentialPackage": false,
       "artifactName": "Shimly_Quiz_Setup_${version}_windows_${arch}.exe"
     },
     "portable": {
