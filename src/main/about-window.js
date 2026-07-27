@@ -11,6 +11,7 @@ const { BrowserWindow, ipcMain, shell } = require('electron');
 const config = require('./config');
 const i18n = require('./i18n');
 const appInfo = require('./app-info');
+const place = require('./window-place');
 
 const PAGE = path.join(__dirname, '..', 'renderer', 'about.html');
 const ICON = path.join(__dirname, '..', 'renderer', 'icon.png');
@@ -25,8 +26,7 @@ function open(parent) {
   }
 
   win = new BrowserWindow({
-    width: 460,
-    height: 620,
+    ...place.centeredOn(parent, 460, 620),
     parent,
     show: false,
     resizable: false,

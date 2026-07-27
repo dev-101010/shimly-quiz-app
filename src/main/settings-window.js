@@ -11,6 +11,7 @@ const { app, BrowserWindow, dialog, ipcMain, shell } = require('electron');
 
 const config = require('./config');
 const i18n = require('./i18n');
+const place = require('./window-place');
 
 const PAGE = path.join(__dirname, '..', 'renderer', 'settings.html');
 const ICON = path.join(__dirname, '..', 'renderer', 'icon.png');
@@ -33,8 +34,7 @@ function open(parent) {
   }
 
   win = new BrowserWindow({
-    width: 560,
-    height: 700,
+    ...place.centeredOn(parent, 560, 700),
     minWidth: 460,
     minHeight: 480,
     parent, // wird mit dem Hauptfenster geschlossen

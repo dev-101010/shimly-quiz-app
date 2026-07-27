@@ -257,6 +257,7 @@ src/main/settings-preload.js Brücke für das Einstellungsfenster
 src/main/about-window.js     Über-Fenster + zugehörige IPC-Kanäle
 src/main/about-preload.js    Brücke für das Über-Fenster
 src/main/app-info.js         Version, Unterbau und Zielseite als Lesewerte
+src/main/window-place.js     platziert Dialoge mittig über dem Hauptfenster
 src/renderer/splash.html     Lade- und Fehlerbildschirm
 src/renderer/settings.html   Einstellungen
 src/renderer/about.html      Über-Fenster
