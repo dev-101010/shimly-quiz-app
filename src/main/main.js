@@ -178,10 +178,10 @@ function attachShortcuts(win) {
       const history = win.webContents.navigationHistory;
       if (history.canGoBack()) return consume(() => history.goBack());
     }
-    // DevTools: Windows/Linux Ctrl+Shift+I oder F12, macOS Cmd+Alt+I.
-    const devToolsKey = isMac
-      ? control && alt && k === 'i'
-      : k === 'f12' || (control && shift && k === 'i');
+    // DevTools: Windows/Linux Ctrl+Shift+I, macOS Cmd+Alt+I. F12 fehlt
+    // absichtlich – zu leicht versehentlich getroffen für etwas, das normale
+    // Nutzung nicht braucht.
+    const devToolsKey = isMac ? control && alt && k === 'i' : control && shift && k === 'i';
     if (devToolsKey) return consume(() => win.webContents.toggleDevTools());
     if (control && k === ',') return consume(() => settingsWindow.open(win));
 
