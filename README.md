@@ -133,7 +133,7 @@ minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
 | `F5` / `Ctrl+R` | Neu laden (`Ctrl+Shift+R` ohne Cache) |
 | `Ctrl` `+` / `-` / `0` | Zoom grösser / kleiner / zurücksetzen |
 | `Alt+←` | Zurück |
-| `F1` | Hilfe (unter macOS nur über das Menü) |
+| `F1` | Hilfe |
 | `Ctrl+,` | Einstellungen |
 | `Ctrl+Shift+I` | DevTools — bewusst nirgends in der App genannt |
 
@@ -142,6 +142,7 @@ Auf macOS liegen dieselben Kürzel auf `Cmd` statt `Ctrl`, und Zurück ist
 
 | Taste (macOS) | Funktion |
 | --- | --- |
+| `Cmd+?` | Hilfe — `F1` steuert dort die Helligkeit |
 | `Ctrl+Cmd+F` | Vollbild — `F11` liegt dort auf Mission Control |
 | `Cmd+Alt+I` | DevTools — `Alt` statt `Shift`, wie in Safari und Chrome |
 

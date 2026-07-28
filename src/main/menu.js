@@ -100,10 +100,9 @@ function template(actions) {
   const helpMenu = {
     label: t.help,
     submenu: [
-      // Unter macOS kommt F1 in der Regel nicht an, deshalb dort ohne Anzeige.
-      isMac
-        ? { label: t.helpPage, click: actions.help }
-        : item(t.helpPage, 'F1', actions.help),
+      // Jede Plattform ihre uebliche Taste: F1 unter Windows und Linux,
+      // Cmd+? unter macOS.
+      item(t.helpPage, isMac ? 'Cmd+?' : 'F1', actions.help),
       { type: 'separator' },
       { label: t.report, click: actions.report },
       { label: t.project, click: actions.project },

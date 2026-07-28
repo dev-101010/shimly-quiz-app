@@ -184,10 +184,12 @@ function attachShortcuts(win) {
     const devToolsKey = isMac ? control && alt && k === 'i' : control && shift && k === 'i';
     if (devToolsKey) return consume(() => win.webContents.toggleDevTools());
     if (control && k === ',') return consume(() => settingsWindow.open(win));
-    // F1 ist unter Windows und Linux die Hilfe-Taste. Unter macOS liegt sie
-    // meist auf der Helligkeit und kommt gar nicht erst an – dort führt der
-    // Weg über das Menü.
-    if (k === 'f1') return consume(() => helpWindow.open(win));
+    // Hilfe: F1 unter Windows und Linux, Cmd+? unter macOS. Dort liegt F1
+    // meist auf der Helligkeit und kommt gar nicht erst an.
+    // Geprüft wird auf das erzeugte Zeichen, nicht auf die Taste – auf
+    // deutschen Tastaturen liegt das Fragezeichen auf Shift+ß statt Shift+7.
+    const helpKey = k === 'f1' || (isMac && input.meta && k === '?');
+    if (helpKey) return consume(() => helpWindow.open(win));
 
     // Ctrl+W / Ctrl+Shift+W schließen sonst mitten im Quiz das Fenster.
     if (control && k === 'w') event.preventDefault();
