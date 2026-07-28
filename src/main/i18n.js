@@ -41,6 +41,45 @@ const de = {
     fullscreen: 'Vollbild',
     devTools: 'Entwicklerwerkzeuge',
     minimize: 'Minimieren',
+    helpPage: 'Hilfe',
+    report: 'Problem melden',
+    project: 'Projektseite',
+  },
+
+  help: {
+    title: 'Hilfe',
+    ctrl: 'Strg',
+    shift: 'Umschalt',
+
+    shortcutsHeading: 'Tastenkürzel',
+    scSettings: 'Einstellungen öffnen',
+    scFullscreen: 'Vollbild an und aus',
+    scExitFullscreen: 'Vollbild verlassen',
+    scReload: 'Seite neu laden',
+    scHardReload: 'Neu laden ohne Zwischenspeicher',
+    scZoom: 'Zoom grösser, kleiner, zurücksetzen',
+    scBack: 'Zurück zur vorigen Seite',
+    scDevTools: 'Entwicklerwerkzeuge',
+    scClose: 'Wird abgefangen, damit das Fenster nicht mitten in einer Runde zugeht',
+
+    notesHeading: 'Gut zu wissen',
+    noteLinksTitle: 'Fremde Links',
+    noteLinks:
+      'Im Fenster öffnet nur shimly-quiz.de. Jeder andere Link und jeder Download geht in deinen Standardbrowser.',
+    noteLoginTitle: 'Angemeldet bleiben',
+    noteLogin:
+      'Die Anmeldung überlebt Neustarts. Abmelden geht über Einstellungen → Daten → Alle Daten löschen.',
+    noteCacheTitle: 'Seite zeigt Veraltetes',
+    noteCache:
+      'Einstellungen → Daten → Zwischenspeicher leeren. Die Anmeldung bleibt dabei bestehen.',
+    noteOfflineTitle: 'Seite nicht erreichbar',
+    noteOffline:
+      'Bei Verbindungsproblemen erscheint eine Fehlerseite mit „Erneut versuchen". Stürzt die Anzeige ab, lädt die App von selbst neu.',
+    noteUnsignedTitle: 'Warnung beim ersten Start',
+    noteUnsigned:
+      'Die App ist nicht signiert. Windows meldet SmartScreen — dort „Weitere Informationen" und „Trotzdem ausführen". Unter macOS hilft Rechtsklick auf die App und „Öffnen".',
+
+    close: 'Schliessen',
   },
 
   splash: {
@@ -143,6 +182,44 @@ const en = {
     fullscreen: 'Full Screen',
     devTools: 'Developer Tools',
     minimize: 'Minimize',
+    helpPage: 'Help',
+    report: 'Report a problem',
+    project: 'Project page',
+  },
+
+  help: {
+    title: 'Help',
+    ctrl: 'Ctrl',
+    shift: 'Shift',
+
+    shortcutsHeading: 'Keyboard shortcuts',
+    scSettings: 'Open settings',
+    scFullscreen: 'Full screen on and off',
+    scExitFullscreen: 'Leave full screen',
+    scReload: 'Reload the page',
+    scHardReload: 'Reload without cache',
+    scZoom: 'Zoom in, out, reset',
+    scBack: 'Back to the previous page',
+    scDevTools: 'Developer tools',
+    scClose: 'Intercepted so the window cannot close mid-round',
+
+    notesHeading: 'Good to know',
+    noteLinksTitle: 'External links',
+    noteLinks:
+      'Only shimly-quiz.de opens in this window. Every other link and every download goes to your default browser.',
+    noteLoginTitle: 'Staying signed in',
+    noteLogin:
+      'Your sign-in survives restarts. To sign out, use Settings → Data → Clear all data.',
+    noteCacheTitle: 'Page shows outdated content',
+    noteCache: 'Settings → Data → Clear cache. Your sign-in stays intact.',
+    noteOfflineTitle: 'Site unreachable',
+    noteOffline:
+      'On connection problems an error page with "Try again" appears. If the display crashes, the app reloads by itself.',
+    noteUnsignedTitle: 'Warning on first launch',
+    noteUnsigned:
+      'The app is not signed. Windows shows SmartScreen — choose "More info" and "Run anyway". On macOS, right-click the app and choose "Open".',
+
+    close: 'Close',
   },
 
   splash: {

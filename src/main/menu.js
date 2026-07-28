@@ -99,7 +99,14 @@ function template(actions) {
 
   const helpMenu = {
     label: t.help,
-    submenu: [{ label: about, click: actions.about }],
+    submenu: [
+      { label: t.helpPage, click: actions.help },
+      { type: 'separator' },
+      { label: t.report, click: actions.report },
+      { label: t.project, click: actions.project },
+      { type: 'separator' },
+      { label: about, click: actions.about },
+    ],
   };
 
   return isMac ? [appMenu, editMenu, viewMenu, windowMenu] : [fileMenu, viewMenu, helpMenu];

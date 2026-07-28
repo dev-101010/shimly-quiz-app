@@ -175,6 +175,14 @@ Menüpunkte zeigen ihr Kürzel deshalb nur an und registrieren es nicht
 mit allen Optionen, den Aufräumaktionen und dem Pfad zur `settings.json` samt
 Knopf, der den Ordner öffnet.
 
+Unter **Hilfe → Hilfe** liegt eine eigene Seite mit allen Tastenkürzeln und den
+Eigenheiten, die man der App nicht ansieht: dass fremde Links im Systembrowser
+aufgehen, dass die Anmeldung Neustarts überlebt, was bei veralteten Inhalten
+hilft und warum beim ersten Start eine Warnung erscheint. Die Kürzel erzeugt
+der Hauptprozess passend zur Plattform, sie stehen nicht fest im Markup.
+Daneben führt das Menü zum Forum-Thread („Problem melden") und zur
+Projektseite.
+
 Reine Angaben zum Programm stehen getrennt davon unter **Hilfe → Über** (unter
 macOS im App-Menü): Version, Electron-, Chromium- und Node-Stand, Plattform,
 Zielseite, erlaubte Hosts und der Hinweis, dass dies ein inoffizieller Client
@@ -263,11 +271,14 @@ src/main/settings-window.js  Einstellungsfenster + zugehörige IPC-Kanäle
 src/main/settings-preload.js Brücke für das Einstellungsfenster
 src/main/about-window.js     Über-Fenster + zugehörige IPC-Kanäle
 src/main/about-preload.js    Brücke für das Über-Fenster
+src/main/help-window.js      Hilfefenster, erzeugt die Kürzel je Plattform
+src/main/help-preload.js     Brücke für das Hilfefenster
 src/main/app-info.js         Version, Unterbau und Zielseite als Lesewerte
 src/main/window-place.js     platziert Dialoge mittig über dem Hauptfenster
 src/renderer/splash.html     Lade- und Fehlerbildschirm
 src/renderer/settings.html   Einstellungen
 src/renderer/about.html      Über-Fenster
+src/renderer/help.html       Hilfeseite
 src/renderer/logo.png        Motiv für beide Seiten
 src/renderer/icon.png        Fenster-Icon (256 px)
 scripts/fetch-icons.js       lädt die Original-Icons nach build/source/

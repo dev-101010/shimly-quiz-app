@@ -14,6 +14,7 @@ const {
 const config = require('./config');
 const settingsWindow = require('./settings-window');
 const aboutWindow = require('./about-window');
+const helpWindow = require('./help-window');
 const menu = require('./menu');
 const i18n = require('./i18n');
 
@@ -223,6 +224,9 @@ function installMenu() {
   menu.install({
     settings: onMain((win) => settingsWindow.open(win)),
     about: onMain((win) => aboutWindow.open(win)),
+    help: onMain((win) => helpWindow.open(win)),
+    report: () => shell.openExternal(config.FORUM_URL).catch(() => {}),
+    project: () => shell.openExternal(config.REPO_URL).catch(() => {}),
     reload: onMain((win) => reload(win, false)),
     hardReload: onMain((win) => reload(win, true)),
     back: onMain((win) => {
@@ -419,6 +423,7 @@ if (!app.requestSingleInstanceLock()) {
   });
 
   aboutWindow.registerIpc();
+  helpWindow.registerIpc();
 
   settingsWindow.registerIpc({
     applySettings,

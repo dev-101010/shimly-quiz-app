@@ -7,6 +7,9 @@ const { app } = require('electron');
 const APP_TITLE = 'Shimly Quiz (Third Party)';
 const APP_URL = 'https://www.shimly-quiz.de/';
 const REPO_URL = 'https://github.com/dev-101010/shimly-quiz-app';
+// Rückmeldungen sammeln sich im Forum, nicht auf GitHub – dorthin zeigt
+// "Problem melden".
+const FORUM_URL = 'https://www.shimly-forum.de/thread-1498.html';
 
 // Nur diese Hosts werden im Fenster geöffnet. Alles andere geht in den
 // Standardbrowser des Systems.
@@ -82,6 +85,7 @@ module.exports = {
   APP_TITLE,
   APP_URL,
   REPO_URL,
+  FORUM_URL,
   ALLOWED_HOSTS,
   DEFAULTS,
   load,
