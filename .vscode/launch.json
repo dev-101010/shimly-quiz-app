@@ -1,0 +1,64 @@
+{
+  // Debug-Profile für die App.
+  //
+  // Wichtig ist "ELECTRON_RUN_AS_NODE": null. VS Code setzt diese Variable in
+  // seiner Umgebung auf 1, wodurch electron.exe als reines Node startet und
+  // die App wortlos wieder beendet. null entfernt die Variable für den
+  // gestarteten Prozess.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Hauptprozess",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      // Der Debug-Port wird für "Renderprozess anhängen" gebraucht.
+      "args": [".", "--remote-debugging-port=9222"],
+      "env": { "ELECTRON_RUN_AS_NODE": null },
+      "console": "integratedTerminal",
+      "outputCapture": "std",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      // Mit --dev öffnet die App die DevTools von selbst in einem eigenen
+      // Fenster; praktisch, wenn es um die Seite und nicht um den
+      // Hauptprozess geht.
+      "name": "Hauptprozess (mit DevTools)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "args": [".", "--dev", "--remote-debugging-port=9222"],
+      "env": { "ELECTRON_RUN_AS_NODE": null },
+      "console": "integratedTerminal",
+      "outputCapture": "std",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      // Hängt sich an die Seite und die Dialogfenster. Setzt voraus, dass die
+      // App bereits mit --remote-debugging-port=9222 läuft.
+      "name": "Renderprozess anhängen",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}/src/renderer",
+      "timeout": 30000
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Haupt- und Renderprozess",
+      "configurations": ["Hauptprozess", "Renderprozess anhängen"],
+      "stopAll": true
+    }
+  ]
+}
