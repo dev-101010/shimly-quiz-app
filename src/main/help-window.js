@@ -37,7 +37,8 @@ function shortcuts() {
     { groups: [[mod, t.keyComma]], text: t.scSettings },
     { groups: isMac ? [['Ctrl', 'Cmd', 'F']] : [['F11']], text: t.scFullscreen },
     { groups: [['Esc']], text: t.scExitFullscreen },
-    { groups: [['F5'], [mod, 'R']], text: t.scReload },
+    // Ein Kuerzel je Zeile. Strg+R geht weiterhin, steht aber nur in der README.
+    { groups: [isMac ? [mod, 'R'] : ['F5']], text: t.scReload },
     // Nur das kuerzere Kuerzel, wie im Menue. Strg+Umschalt+R funktioniert
     // weiterhin und steht in der README.
     { groups: [isMac ? [mod, shift, 'R'] : [mod, 'F5']], text: t.scHardReload },
