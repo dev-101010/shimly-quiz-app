@@ -74,11 +74,23 @@
       .keys {
         display: grid;
         grid-template-columns: auto 1fr;
-        gap: 8px 16px;
+        gap: 10px 18px;
         align-items: baseline;
       }
+      /* Jede Taste ein eigenes Feld – der Abstand entsteht durch die Lücke,
+         nicht durch Zeichen in der Beschriftung. */
+      .combo {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+      }
+      .sep {
+        font-style: normal;
+        font-size: 12px;
+        color: var(--muted);
+      }
       kbd {
-        justify-self: start;
         padding: 3px 8px;
         border: 1px solid rgba(255, 255, 255, 0.16);
         border-bottom-width: 2px;
@@ -173,12 +185,32 @@
       // Kürzel kommen fertig aus dem Hauptprozess – sie hängen von der
       // Plattform ab und stehen deshalb nicht im Markup.
       const keys = document.getElementById("keys");
+
+      function separator(sign) {
+        const el = document.createElement("i");
+        el.className = "sep";
+        el.textContent = sign;
+        return el;
+      }
+
       for (const row of api.shortcuts) {
-        const kbd = document.createElement("kbd");
-        kbd.textContent = row.keys;
+        const combo = document.createElement("div");
+        combo.className = "combo";
+
+        row.groups.forEach((group, groupIndex) => {
+          // Mehrere Gruppen sind gleichwertige Alternativen.
+          if (groupIndex > 0) combo.append(separator("/"));
+          group.forEach((key, keyIndex) => {
+            if (keyIndex > 0) combo.append(separator("+"));
+            const kbd = document.createElement("kbd");
+            kbd.textContent = key;
+            combo.append(kbd);
+          });
+        });
+
         const text = document.createElement("span");
         text.textContent = row.text;
-        keys.append(kbd, text);
+        keys.append(combo, text);
       }
 
       const notes = document.getElementById("notes");

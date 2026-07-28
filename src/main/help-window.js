@@ -21,21 +21,34 @@ const isMac = process.platform === 'darwin';
 
 let win = null;
 
+/**
+ * Jede Zeile besteht aus Gruppen gleichwertiger Tastenfolgen: innerhalb einer
+ * Gruppe werden die Tasten zusammen gedrückt, mehrere Gruppen sind
+ * Alternativen. Die Seite setzt daraus einzelne Tastenfelder – deshalb hier
+ * einzelne Namen statt einer fertigen Zeichenkette.
+ */
 function shortcuts() {
   const t = i18n.strings().help;
   const mod = isMac ? 'Cmd' : t.ctrl;
   const shift = isMac ? 'Shift' : t.shift;
 
   return [
-    { keys: `${mod}+,`, text: t.scSettings },
-    { keys: isMac ? 'Ctrl+Cmd+F' : 'F11', text: t.scFullscreen },
-    { keys: 'Esc', text: t.scExitFullscreen },
-    { keys: `F5 / ${mod}+R`, text: t.scReload },
-    { keys: `${mod}+${shift}+R`, text: t.scHardReload },
-    { keys: `${mod}+ + / − / 0`, text: t.scZoom },
-    { keys: isMac ? 'Cmd+←' : 'Alt+←', text: t.scBack },
-    { keys: isMac ? 'Cmd+Alt+I' : `F12 / ${mod}+${shift}+I`, text: t.scDevTools },
-    { keys: `${mod}+W`, text: t.scClose },
+    { groups: [[mod, t.keyComma]], text: t.scSettings },
+    { groups: isMac ? [['Ctrl', 'Cmd', 'F']] : [['F11']], text: t.scFullscreen },
+    { groups: [['Esc']], text: t.scExitFullscreen },
+    { groups: [['F5'], [mod, 'R']], text: t.scReload },
+    { groups: [[mod, shift, 'R']], text: t.scHardReload },
+    // Bewusst drei Zeilen: als "Strg + Plus / Minus / 0" sieht es aus, als
+    // kaemen Minus und 0 ohne die Modifikatortaste aus.
+    { groups: [[mod, t.keyPlus]], text: t.scZoomIn },
+    { groups: [[mod, t.keyMinus]], text: t.scZoomOut },
+    { groups: [[mod, '0']], text: t.scZoomReset },
+    { groups: [[isMac ? 'Cmd' : 'Alt', '←']], text: t.scBack },
+    {
+      groups: isMac ? [['Cmd', 'Alt', 'I']] : [['F12'], [mod, shift, 'I']],
+      text: t.scDevTools,
+    },
+    { groups: [[mod, 'W']], text: t.scClose },
   ];
 }
 
