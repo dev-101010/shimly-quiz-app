@@ -33,6 +33,9 @@ function shortcuts() {
   const shift = isMac ? 'Shift' : t.shift;
 
   return [
+    // Unter macOS liegt F1 auf der Helligkeit und erreicht die App nicht –
+    // dort wird die Zeile weggelassen statt etwas Falsches zu versprechen.
+    ...(isMac ? [] : [{ groups: [['F1']], text: t.scHelp }]),
     { groups: [[mod, t.keyComma]], text: t.scSettings },
     { groups: isMac ? [['Ctrl', 'Cmd', 'F']] : [['F11']], text: t.scFullscreen },
     { groups: [['Esc']], text: t.scExitFullscreen },

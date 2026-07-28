@@ -133,6 +133,7 @@ minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
 | `F5` / `Ctrl+R` | Neu laden (`Ctrl+Shift+R` ohne Cache) |
 | `Ctrl` `+` / `-` / `0` | Zoom grösser / kleiner / zurücksetzen |
 | `Alt+←` | Zurück |
+| `F1` | Hilfe (unter macOS nur über das Menü) |
 | `Ctrl+,` | Einstellungen |
 | `Ctrl+Shift+I` | DevTools — bewusst nirgends in der App genannt |
 

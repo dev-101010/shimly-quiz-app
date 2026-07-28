@@ -55,6 +55,7 @@ const de = {
     keyMinus: 'Minus',
 
     shortcutsHeading: 'Tastenkürzel',
+    scHelp: 'Diese Hilfe öffnen',
     scSettings: 'Einstellungen öffnen',
     scFullscreen: 'Vollbild an und aus',
     scExitFullscreen: 'Vollbild verlassen',
@@ -193,6 +194,7 @@ const en = {
     keyMinus: 'Minus',
 
     shortcutsHeading: 'Keyboard shortcuts',
+    scHelp: 'Open this help',
     scSettings: 'Open settings',
     scFullscreen: 'Full screen on and off',
     scExitFullscreen: 'Leave full screen',

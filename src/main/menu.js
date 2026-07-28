@@ -100,7 +100,10 @@ function template(actions) {
   const helpMenu = {
     label: t.help,
     submenu: [
-      { label: t.helpPage, click: actions.help },
+      // Unter macOS kommt F1 in der Regel nicht an, deshalb dort ohne Anzeige.
+      isMac
+        ? { label: t.helpPage, click: actions.help }
+        : item(t.helpPage, 'F1', actions.help),
       { type: 'separator' },
       { label: t.report, click: actions.report },
       { label: t.project, click: actions.project },
