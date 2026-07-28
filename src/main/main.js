@@ -170,7 +170,12 @@ function attachShortcuts(win) {
     if (fullscreenKey) return consume(() => setFullScreen(win, !win.isFullScreen()));
 
     if (k === 'escape' && win.isFullScreen()) return consume(() => setFullScreen(win, false));
-    if (k === 'f5' || (control && k === 'r')) return consume(() => reload(win, control && shift));
+    // Neu laden: F5 und Ctrl+R weich, Ctrl+F5, Umschalt+F5 und Ctrl+Umschalt+R
+    // ohne Zwischenspeicher – so machen es die Browser.
+    if (k === 'f5' || (control && k === 'r')) {
+      const hard = k === 'f5' ? control || shift : shift;
+      return consume(() => reload(win, hard));
+    }
     if (control && (k === '0' || k === 'numpad0')) return consume(() => setZoom(win, 1));
     if (control && (k === '+' || k === '=')) return consume(() => stepZoom(win, +0.1));
     if (control && (k === '-' || k === '_')) return consume(() => stepZoom(win, -0.1));

@@ -130,7 +130,8 @@ minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
 | --- | --- |
 | `F11` | Vollbild an/aus |
 | `Esc` | Vollbild verlassen |
-| `F5` / `Ctrl+R` | Neu laden (`Ctrl+Shift+R` ohne Cache) |
+| `F5` / `Ctrl+R` | Neu laden |
+| `Ctrl+F5` / `Shift+F5` / `Ctrl+Shift+R` | Neu laden ohne Zwischenspeicher |
 | `Ctrl` `+` / `-` / `0` | Zoom grösser / kleiner / zurücksetzen |
 | `Alt+←` | Zurück |
 | `F1` | Hilfe |

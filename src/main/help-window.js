@@ -38,7 +38,10 @@ function shortcuts() {
     { groups: isMac ? [['Ctrl', 'Cmd', 'F']] : [['F11']], text: t.scFullscreen },
     { groups: [['Esc']], text: t.scExitFullscreen },
     { groups: [['F5'], [mod, 'R']], text: t.scReload },
-    { groups: [[mod, shift, 'R']], text: t.scHardReload },
+    {
+      groups: isMac ? [[mod, shift, 'R']] : [[mod, shift, 'R'], [mod, 'F5']],
+      text: t.scHardReload,
+    },
     // Bewusst drei Zeilen: als "Strg + Plus / Minus / 0" sieht es aus, als
     // kaemen Minus und 0 ohne die Modifikatortaste aus.
     { groups: [[mod, t.keyPlus]], text: t.scZoomIn },
