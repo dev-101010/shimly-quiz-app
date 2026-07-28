@@ -72,7 +72,9 @@ function template(actions) {
     label: t.view,
     submenu: [
       item(t.reload, 'F5', actions.reload),
-      item(t.hardReload, 'CmdOrCtrl+Shift+R', actions.hardReload),
+      // Ein Menuepunkt zeigt nur ein Kuerzel – hier das kuerzere. Unter macOS
+      // gibt es Strg+F5 nicht, dort bleibt Cmd+Umschalt+R.
+      item(t.hardReload, isMac ? 'Cmd+Shift+R' : 'Ctrl+F5', actions.hardReload),
       { type: 'separator' },
       item(t.back, isMac ? 'Cmd+Left' : 'Alt+Left', actions.back),
       { type: 'separator' },
