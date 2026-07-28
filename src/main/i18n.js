@@ -21,7 +21,7 @@ const de = {
     window: 'Fenster',
     help: 'Hilfe',
     about: 'Über', // + Programmname
-    settings: 'Einstellungen…',
+    settings: 'Einstellungen',
     quit: 'Beenden',
     hide: 'Ausblenden',
     hideOthers: 'Andere ausblenden',
@@ -161,7 +161,7 @@ const en = {
     window: 'Window',
     help: 'Help',
     about: 'About',
-    settings: 'Settings…',
+    settings: 'Settings',
     quit: 'Quit',
     hide: 'Hide',
     hideOthers: 'Hide Others',

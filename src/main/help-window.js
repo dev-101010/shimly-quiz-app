@@ -34,7 +34,8 @@ function shortcuts() {
 
   return [
     { groups: isMac ? [['Cmd', '?']] : [['F1']], text: t.scHelp },
-    { groups: [[mod, t.keyComma]], text: t.scSettings },
+    // F2 liegt neben F1; unter macOS ist das eine Medientaste, dort Cmd+Komma.
+    { groups: [isMac ? [mod, t.keyComma] : ['F2']], text: t.scSettings },
     { groups: isMac ? [['Ctrl', 'Cmd', 'F']] : [['F11']], text: t.scFullscreen },
     { groups: [['Esc']], text: t.scExitFullscreen },
     // Ein Kuerzel je Zeile. Strg+R geht weiterhin, steht aber nur in der README.

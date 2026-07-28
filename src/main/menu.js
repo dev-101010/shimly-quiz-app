@@ -47,7 +47,7 @@ function template(actions) {
   const fileMenu = {
     label: t.file,
     submenu: [
-      item(t.settings, 'Ctrl+,', actions.settings),
+      item(t.settings, 'F2', actions.settings),
       { type: 'separator' },
       { role: 'quit', label: t.quit },
     ],

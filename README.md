@@ -135,7 +135,7 @@ minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
 | `Ctrl` `+` / `-` / `0` | Zoom grösser / kleiner / zurücksetzen |
 | `Alt+←` | Zurück |
 | `F1` | Hilfe |
-| `Ctrl+,` | Einstellungen |
+| `F2` / `Ctrl+,` | Einstellungen |
 | `Ctrl+Shift+I` | DevTools — bewusst nirgends in der App genannt |
 
 Auf macOS liegen dieselben Kürzel auf `Cmd` statt `Ctrl`, und Zurück ist

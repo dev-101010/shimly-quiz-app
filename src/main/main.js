@@ -188,7 +188,9 @@ function attachShortcuts(win) {
     // Nutzung nicht braucht.
     const devToolsKey = isMac ? control && alt && k === 'i' : control && shift && k === 'i';
     if (devToolsKey) return consume(() => win.webContents.toggleDevTools());
-    if (control && k === ',') return consume(() => settingsWindow.open(win));
+    // F2 als merkbare Taste direkt neben F1 (Hilfe); Ctrl+, bleibt zusätzlich,
+    // weil viele es aus anderen Programmen kennen.
+    if (k === 'f2' || (control && k === ',')) return consume(() => settingsWindow.open(win));
     // Hilfe: F1 unter Windows und Linux, Cmd+? unter macOS. Dort liegt F1
     // meist auf der Helligkeit und kommt gar nicht erst an.
     // Geprüft wird auf das erzeugte Zeichen, nicht auf die Taste – auf
