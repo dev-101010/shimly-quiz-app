@@ -7,7 +7,7 @@
  */
 
 const path = require('path');
-const { app, BrowserWindow, dialog, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 
 const config = require('./config');
 const i18n = require('./i18n');
@@ -91,7 +91,6 @@ function registerIpc(actions) {
 
   ipcMain.handle('settings:read', () => ({
     config: config.load(),
-    configPath: config.configPath(),
     startup,
   }));
 
@@ -99,11 +98,6 @@ function registerIpc(actions) {
     const next = config.save(patch && typeof patch === 'object' ? patch : {});
     onChange(patch || {}, next);
     return next;
-  });
-
-  ipcMain.handle('settings:reveal-config', () => {
-    config.save({}); // legt die Datei an, falls noch nie gespeichert wurde
-    shell.showItemInFolder(config.configPath());
   });
 
   ipcMain.handle('settings:clear-cache', async () => {

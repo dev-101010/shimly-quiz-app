@@ -11,14 +11,12 @@ contextBridge.exposeInMainWorld('shimlyApp', {
 });
 
 // Rechtsklick-Menü von Chromium stört im Vollbild-Quiz; Eingabefelder bleiben
-// bewusst ausgenommen, damit Einfügen weiter funktioniert. Der Wert kommt aus
-// den Einstellungen und lässt sich dort im laufenden Betrieb umschalten.
+// bewusst ausgenommen, damit Einfügen weiter funktioniert. Der Wert steht in
+// der settings.json und wird beim Laden einmal abgefragt – im
+// Einstellungsfenster gibt es dafür bewusst keinen Schalter.
 let contextMenuBlocked = false;
 
 ipcRenderer.invoke('app:context-menu-blocked').then((blocked) => {
-  contextMenuBlocked = blocked;
-});
-ipcRenderer.on('app:context-menu-blocked', (_event, blocked) => {
   contextMenuBlocked = blocked;
 });
 

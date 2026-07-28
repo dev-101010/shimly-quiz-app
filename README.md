@@ -218,7 +218,11 @@ Unter **Daten** stehen zwei Aufräumaktionen, bewusst getrennt:
   fragt deshalb vorher nach und lädt die Seite anschliessend neu. Die
   `settings.json` bleibt unberührt, die liegt ausserhalb der Session.
 
-Wer die Datei lieber direkt bearbeitet: sie wird beim ersten Start angelegt.
+Nicht im Dialog steht `blockContextMenu`. Das Rechtsklick-Menü zu erlauben ist
+kein Fall für den Alltag, sondern eine Ausnahme — wer sie braucht, ändert den
+Wert in der Datei und startet neu.
+
+Die Datei wird beim ersten Start angelegt:
 
 | Plattform | Pfad |
 | --- | --- |

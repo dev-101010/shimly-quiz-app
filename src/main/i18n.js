@@ -101,7 +101,6 @@ const de = {
 
     groupWindow: 'Fenster',
     groupPerformance: 'Leistung',
-    groupControls: 'Bedienung',
     groupData: 'Daten',
 
     startFullscreen: 'Vollbild beim Start',
@@ -114,8 +113,6 @@ const de = {
     disableHardwareAccelerationHint: 'Notausgang bei Grafiktreiber-Problemen.',
     preventDisplaySleep: 'Standby verhindern',
     preventDisplaySleepHint: 'Bildschirm bleibt an, solange die App läuft.',
-    blockContextMenu: 'Rechtsklick-Menü blockieren',
-    blockContextMenuHint: 'Eingabefelder bleiben ausgenommen, Einfügen funktioniert weiter.',
 
     restartNotice: 'Diese Änderung greift erst nach einem Neustart der App.',
     restartNow: 'Jetzt neu starten',
@@ -133,9 +130,6 @@ const de = {
     confirmYes: 'Löschen',
     confirmNo: 'Abbrechen',
     done: 'Erledigt',
-
-    configFile: 'Einstellungsdatei',
-    revealFolder: 'Ordner öffnen',
 
     close: 'Schliessen',
   },
@@ -244,7 +238,6 @@ const en = {
 
     groupWindow: 'Window',
     groupPerformance: 'Performance',
-    groupControls: 'Controls',
     groupData: 'Data',
 
     startFullscreen: 'Start in full screen',
@@ -257,8 +250,6 @@ const en = {
     disableHardwareAccelerationHint: 'Escape hatch for graphics driver trouble.',
     preventDisplaySleep: 'Prevent standby',
     preventDisplaySleepHint: 'Keeps the display awake while the app runs.',
-    blockContextMenu: 'Block right-click menu',
-    blockContextMenuHint: 'Input fields stay exempt, pasting keeps working.',
 
     restartNotice: 'This change takes effect after restarting the app.',
     restartNow: 'Restart now',
@@ -276,9 +267,6 @@ const en = {
     confirmYes: 'Delete',
     confirmNo: 'Cancel',
     done: 'Done',
-
-    configFile: 'Settings file',
-    revealFolder: 'Open folder',
 
     close: 'Close',
   },

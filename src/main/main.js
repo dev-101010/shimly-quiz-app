@@ -348,9 +348,6 @@ function applySettings(patch, next) {
   const live = mainWindow && !mainWindow.isDestroyed() ? mainWindow : null;
 
   if ('preventDisplaySleep' in patch) setDisplaySleepBlocked(next.preventDisplaySleep);
-  if ('blockContextMenu' in patch && live) {
-    live.webContents.send('app:context-menu-blocked', next.blockContextMenu);
-  }
   if ('zoomFactor' in patch && live) live.webContents.setZoomFactor(next.zoomFactor);
 }
 

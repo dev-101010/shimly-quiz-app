@@ -198,14 +198,6 @@
         flex: 1;
       }
 
-      .path {
-        font-family: "Cascadia Mono", Consolas, monospace;
-        font-size: 11px;
-        overflow-wrap: anywhere;
-        user-select: text;
-        -webkit-user-select: text;
-      }
-
       /* Infos */
       dl {
         margin: 0;
@@ -318,18 +310,6 @@
         </label>
       </div>
 
-      <h2 data-t="groupControls"></h2>
-      <div class="row">
-        <div class="text">
-          <span class="name" data-t="blockContextMenu"></span>
-          <span class="hint" data-t="blockContextMenuHint"></span>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="blockContextMenu" />
-          <span class="track"></span>
-        </label>
-      </div>
-
       <div id="restart" hidden>
         <span data-t="restartNotice"></span>
         <button class="primary small" type="button" id="doRestart" data-t="restartNow"></button>
@@ -349,13 +329,6 @@
           <span class="hint" data-t="clearDataHint"></span>
         </div>
         <button class="small" type="button" id="clearData" data-t="clearDataAction"></button>
-      </div>
-      <div class="row">
-        <div class="text">
-          <span class="name" data-t="configFile"></span>
-          <span class="hint"><span id="configPath" class="path"></span></span>
-        </div>
-        <button class="small" type="button" id="reveal" data-t="revealFolder"></button>
       </div>
     </main>
 
@@ -378,7 +351,6 @@
         "uncapFrameRate",
         "disableHardwareAcceleration",
         "preventDisplaySleep",
-        "blockContextMenu",
       ];
 
       const zoom = document.getElementById("zoomFactor");
@@ -407,11 +379,10 @@
         showZoom(cfg.zoomFactor);
       }
 
-      api.read().then(({ config, configPath, startup: atStart }) => {
+      api.read().then(({ config, startup: atStart }) => {
         startup = atStart;
         fill(config);
         refreshRestartHint();
-        document.getElementById("configPath").textContent = configPath;
       });
 
       for (const key of TOGGLES) {
@@ -453,7 +424,6 @@
       withFeedback(document.getElementById("clearCache"), () => api.clearCache());
       withFeedback(document.getElementById("clearData"), () => api.clearData());
 
-      document.getElementById("reveal").addEventListener("click", () => api.revealConfig());
       document.getElementById("doRestart").addEventListener("click", () => api.relaunch());
       document.getElementById("close").addEventListener("click", () => api.close());
 
