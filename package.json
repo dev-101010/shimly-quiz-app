@@ -1,7 +1,7 @@
 {
   "name": "shimly-quiz",
   "productName": "Shimly_Quiz",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Shimly Quiz als native Desktop-App mit eingebettetem Browser",
   "main": "src/main/main.js",
   "author": "Dennis Drochmann",
