@@ -44,10 +44,7 @@ function shortcuts() {
     { groups: [[mod, t.keyMinus]], text: t.scZoomOut },
     { groups: [[mod, '0']], text: t.scZoomReset },
     { groups: [[isMac ? 'Cmd' : 'Alt', '←']], text: t.scBack },
-    {
-      groups: isMac ? [['Cmd', 'Alt', 'I']] : [['F12'], [mod, shift, 'I']],
-      text: t.scDevTools,
-    },
+    // Entwicklerwerkzeuge fehlen hier absichtlich – siehe menu.js.
     { groups: [[mod, 'W']], text: t.scClose },
   ];
 }

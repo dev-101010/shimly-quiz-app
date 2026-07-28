@@ -82,11 +82,11 @@ function template(actions) {
       item(t.zoomOut, 'CmdOrCtrl+-', actions.zoomOut),
       item(t.zoomReset, 'CmdOrCtrl+0', actions.zoomReset),
       { type: 'separator' },
-      // Jede Plattform bekommt ihr uebliches Kuerzel angezeigt: F11 gibt es
-      // unter macOS nicht als Vollbild, und die DevTools liegen dort auf Alt.
+      // F11 gibt es unter macOS nicht als Vollbild – dort ist es Ctrl+Cmd+F.
       item(t.fullscreen, isMac ? 'Control+Cmd+F' : 'F11', actions.fullscreen),
-      { type: 'separator' },
-      item(t.devTools, isMac ? 'Cmd+Alt+I' : 'CmdOrCtrl+Shift+I', actions.devTools),
+      // Die Entwicklerwerkzeuge stehen bewusst nicht im Menue: fuer normale
+      // Nutzung sind sie ohne Wert. Die Taste bleibt, siehe attachShortcuts
+      // in main.js, dokumentiert ist sie nur in der README.
     ],
   };
 

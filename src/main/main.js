@@ -237,7 +237,6 @@ function installMenu() {
     zoomOut: onMain((win) => stepZoom(win, -0.1)),
     zoomReset: onMain((win) => setZoom(win, 1)),
     fullscreen: onMain((win) => setFullScreen(win, !win.isFullScreen())),
-    devTools: onMain((win) => win.webContents.toggleDevTools()),
   });
 }
 

@@ -134,7 +134,7 @@ minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
 | `Ctrl` `+` / `-` / `0` | Zoom grösser / kleiner / zurücksetzen |
 | `Alt+←` | Zurück |
 | `Ctrl+,` | Einstellungen |
-| `F12` / `Ctrl+Shift+I` | DevTools |
+| `F12` / `Ctrl+Shift+I` | DevTools — bewusst nirgends in der App genannt |
 
 Auf macOS liegen dieselben Kürzel auf `Cmd` statt `Ctrl`, und Zurück ist
 `Cmd+←`. Zwei Ausnahmen, weil `Cmd` dort nicht die Konvention ist:
@@ -175,7 +175,12 @@ Menüpunkte zeigen ihr Kürzel deshalb nur an und registrieren es nicht
 mit allen Optionen, den Aufräumaktionen und dem Pfad zur `settings.json` samt
 Knopf, der den Ordner öffnet.
 
-Unter **Hilfe → Hilfe** liegt eine eigene Seite mit allen Tastenkürzeln und den
+Die **Entwicklerwerkzeuge** stehen weder im Menü noch auf der Hilfeseite. Für
+normale Nutzung haben sie keinen Wert und stiften nur Verwirrung; die
+Tastenkombination oben funktioniert aber unverändert. Dieser Abschnitt ist die
+einzige Stelle, an der sie dokumentiert ist.
+
+Unter **Hilfe → Hilfe** liegt eine eigene Seite mit allen übrigen Tastenkürzeln und den
 Eigenheiten, die man der App nicht ansieht: dass fremde Links im Systembrowser
 aufgehen, dass die Anmeldung Neustarts überlebt, was bei veralteten Inhalten
 hilft und warum beim ersten Start eine Warnung erscheint. Die Kürzel erzeugt

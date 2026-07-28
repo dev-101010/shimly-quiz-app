@@ -39,7 +39,6 @@ const de = {
     zoomOut: 'Verkleinern',
     zoomReset: 'Originalgrösse',
     fullscreen: 'Vollbild',
-    devTools: 'Entwicklerwerkzeuge',
     minimize: 'Minimieren',
     helpPage: 'Hilfe',
     report: 'Problem melden',
@@ -65,7 +64,6 @@ const de = {
     scZoomOut: 'Ansicht verkleinern',
     scZoomReset: 'Ansicht auf Originalgrösse',
     scBack: 'Zurück zur vorigen Seite',
-    scDevTools: 'Entwicklerwerkzeuge',
     scClose: 'Wird abgefangen, damit das Fenster nicht mitten in einer Runde zugeht',
 
     notesHeading: 'Gut zu wissen',
@@ -186,7 +184,6 @@ const en = {
     zoomOut: 'Zoom Out',
     zoomReset: 'Actual Size',
     fullscreen: 'Full Screen',
-    devTools: 'Developer Tools',
     minimize: 'Minimize',
     helpPage: 'Help',
     report: 'Report a problem',
@@ -211,7 +208,6 @@ const en = {
     scZoomOut: 'Zoom out',
     scZoomReset: 'Reset zoom to actual size',
     scBack: 'Back to the previous page',
-    scDevTools: 'Developer tools',
     scClose: 'Intercepted so the window cannot close mid-round',
 
     notesHeading: 'Good to know',
