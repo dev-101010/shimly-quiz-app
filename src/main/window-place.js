@@ -42,14 +42,14 @@ function fitInto(area, parent, width, height) {
 }
 
 /**
- * Wie `fitInto`, aber holt Bildschirm und Elternmasse selbst. Ohne
+ * Wie `fitInto`, aber holt Bildschirm und Elternmaße selbst. Ohne
  * Elternfenster wird auf dem primären Bildschirm zentriert.
  */
 function centeredOn(parent, width, height) {
   const alive = parent && !parent.isDestroyed();
 
   // Minimiert liefert getBounds auf manchen Systemen Platzhalterwerte weit
-  // ausserhalb; getNormalBounds gibt die letzte echte Grösse.
+  // außerhalb; getNormalBounds gibt die letzte echte Größe.
   const bounds = alive
     ? parent.isMinimized()
       ? parent.getNormalBounds()

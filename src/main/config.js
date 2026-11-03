@@ -40,35 +40,84 @@ function isPlainObject(v) {
   return v !== null && typeof v === 'object' && !Array.isArray(v);
 }
 
-function merge(base, override) {
+/**
+ * Passt `value` zum Typ des Standardwerts? Maßstab ist immer DEFAULTS, nicht
+ * der aktuelle Stand – sonst ließe sich z. B. `x` nach einer Zahl nie wieder
+ * auf `null` zurücksetzen. `null` als Standard steht für „Zahl oder null“.
+ */
+function compatible(reference, value) {
+  if (reference === null) return value === null || Number.isFinite(value);
+  if (typeof reference === 'number') return Number.isFinite(value);
+  return typeof value === typeof reference;
+}
+
+/**
+ * Übernimmt aus `override` nur bekannte Schlüssel mit passendem Typ. Eine von
+ * Hand verbogene settings.json (z. B. `"zoomFactor": "1.5"`) fällt so still
+ * auf den bisherigen Wert zurück, statt später in Electron zu werfen.
+ */
+function merge(base, override, schema = DEFAULTS) {
   const out = { ...base };
-  for (const [key, value] of Object.entries(override || {})) {
-    if (!(key in base)) continue;
-    out[key] = isPlainObject(base[key]) && isPlainObject(value) ? merge(base[key], value) : value;
+  if (!isPlainObject(override)) return out;
+  for (const [key, value] of Object.entries(override)) {
+    if (!(key in schema)) continue;
+    if (isPlainObject(schema[key])) {
+      if (isPlainObject(value)) out[key] = merge(base[key], value, schema[key]);
+    } else if (compatible(schema[key], value)) {
+      out[key] = value;
+    }
   }
   return out;
 }
 
+const ZOOM_MIN = 0.4;
+const ZOOM_MAX = 3;
+
+function clampZoom(factor) {
+  return Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Number(factor.toFixed(2))));
+}
+
+function normalize(cfg) {
+  return { ...cfg, zoomFactor: clampZoom(cfg.zoomFactor) };
+}
+
 let current = null;
 
+/**
+ * Aktueller Stand. Jedes `save` legt ein neues Objekt an – den Rückgabewert
+ * deshalb nicht dauerhaft festhalten, sondern bei Bedarf neu abfragen.
+ */
 function load() {
   if (current) return current;
   try {
-    current = merge(DEFAULTS, JSON.parse(fs.readFileSync(configPath(), 'utf8')));
+    current = normalize(merge(DEFAULTS, JSON.parse(fs.readFileSync(configPath(), 'utf8'))));
   } catch {
-    current = merge(DEFAULTS, {});
+    current = normalize(merge(DEFAULTS, {}));
   }
   return current;
 }
 
 function save(patch) {
-  current = merge(load(), patch);
+  current = normalize(merge(load(), patch));
   try {
     fs.writeFileSync(configPath(), JSON.stringify(current, null, 2), 'utf8');
   } catch (err) {
     console.error('[config] Speichern fehlgeschlagen:', err.message);
   }
   return current;
+}
+
+// Was an den Systembrowser bzw. das System weitergereicht werden darf. Andere
+// Schemata (ms-msdt:, search-ms:, file: …) starten unter Umständen beliebige
+// Programme – die Electron-Sicherheits-Checkliste warnt ausdrücklich davor.
+const EXTERNAL_PROTOCOLS = ['https:', 'http:', 'mailto:'];
+
+function isSafeExternalUrl(url) {
+  try {
+    return EXTERNAL_PROTOCOLS.includes(new URL(url).protocol);
+  } catch {
+    return false;
+  }
 }
 
 function isAllowedUrl(url) {
@@ -90,6 +139,8 @@ module.exports = {
   DEFAULTS,
   load,
   save,
+  clampZoom,
   configPath,
   isAllowedUrl,
+  isSafeExternalUrl,
 };

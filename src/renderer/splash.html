@@ -167,8 +167,12 @@
         document.getElementById("quit").addEventListener("click", () => window.shimlyApp.quit());
         document.getElementById("retry").focus();
 
+        // F5 fängt schon der Hauptprozess ab. Enter auf einem Knopf löst dessen
+        // Klick selbst aus – hier nur, wenn der Fokus woanders liegt.
         addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === "F5") window.shimlyApp.retry();
+          if (e.key === "Enter" && !(e.target instanceof HTMLButtonElement)) {
+            window.shimlyApp.retry();
+          }
         });
       }
     </script>

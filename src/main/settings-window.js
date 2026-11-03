@@ -23,7 +23,7 @@ const NEEDS_RESTART = ['uncapFrameRate', 'disableHardwareAcceleration'];
 let win = null;
 
 // Stand der Neustart-Optionen beim Programmstart. Der Dialog vergleicht dagegen,
-// damit der Hinweis auch nach Schliessen und erneutem Öffnen stehen bleibt.
+// damit der Hinweis auch nach Schließen und erneutem Öffnen stehen bleibt.
 const startup = {};
 
 function open(parent) {

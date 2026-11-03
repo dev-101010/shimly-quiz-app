@@ -2,7 +2,7 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
-// Brücke ausschliesslich für das Einstellungsfenster (src/renderer/settings.html).
+// Brücke ausschließlich für das Einstellungsfenster (src/renderer/settings.html).
 contextBridge.exposeInMainWorld('settingsApi', {
   // Synchron geholt, damit die Seite ihre Beschriftungen sofort setzen kann.
   t: ipcRenderer.sendSync('app:strings'),

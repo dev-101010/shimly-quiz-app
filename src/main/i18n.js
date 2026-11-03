@@ -35,9 +35,9 @@ const de = {
     reload: 'Neu laden',
     hardReload: 'Neu laden ohne Cache',
     back: 'Zurück',
-    zoomIn: 'Vergrössern',
+    zoomIn: 'Vergrößern',
     zoomOut: 'Verkleinern',
-    zoomReset: 'Originalgrösse',
+    zoomReset: 'Originalgröße',
     fullscreen: 'Vollbild',
     minimize: 'Minimieren',
     helpPage: 'Hilfe',
@@ -61,9 +61,9 @@ const de = {
     scExitFullscreen: 'Vollbild verlassen',
     scReload: 'Seite neu laden',
     scHardReload: 'Neu laden ohne Zwischenspeicher',
-    scZoomIn: 'Ansicht vergrössern',
+    scZoomIn: 'Ansicht vergrößern',
     scZoomOut: 'Ansicht verkleinern',
-    scZoomReset: 'Ansicht auf Originalgrösse',
+    scZoomReset: 'Ansicht auf Originalgröße',
     scBack: 'Zurück zur vorigen Seite',
     scClose: 'Wird abgefangen, damit das Fenster nicht mitten in einer Runde zugeht',
 
@@ -79,12 +79,12 @@ const de = {
       'Einstellungen → Daten → Zwischenspeicher leeren. Die Anmeldung bleibt dabei bestehen.',
     noteOfflineTitle: 'Seite nicht erreichbar',
     noteOffline:
-      'Bei Verbindungsproblemen erscheint eine Fehlerseite mit „Erneut versuchen". Stürzt die Anzeige ab, lädt die App von selbst neu.',
+      'Bei Verbindungsproblemen erscheint eine Fehlerseite mit „Erneut versuchen“. Stürzt die Anzeige ab, lädt die App von selbst neu.',
     noteUnsignedTitle: 'Warnung beim ersten Start',
     noteUnsigned:
-      'Die App ist nicht signiert. Windows meldet SmartScreen — dort „Weitere Informationen" und „Trotzdem ausführen". Unter macOS hilft Rechtsklick auf die App und „Öffnen".',
+      'Die App ist nicht signiert. Windows meldet SmartScreen — dort „Weitere Informationen“ und „Trotzdem ausführen“. Unter macOS hilft Rechtsklick auf die App und „Öffnen“.',
 
-    close: 'Schliessen',
+    close: 'Schließen',
   },
 
   splash: {
@@ -132,7 +132,7 @@ const de = {
     confirmNo: 'Abbrechen',
     done: 'Erledigt',
 
-    close: 'Schliessen',
+    close: 'Schließen',
   },
 
   about: {
@@ -147,7 +147,7 @@ const de = {
     disclaimer:
       'Inoffizieller Client für shimly-quiz.de. Nicht mit dem Betreiber der Seite verbunden.',
     repo: 'Projektseite öffnen',
-    close: 'Schliessen',
+    close: 'Schließen',
   },
 };
 

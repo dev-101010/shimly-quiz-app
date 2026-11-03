@@ -47,6 +47,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Texte prüfen
+        run: npm run check:i18n
+
       - name: Build
         run: npx electron-builder ${{ matrix.target }} --publish never
 

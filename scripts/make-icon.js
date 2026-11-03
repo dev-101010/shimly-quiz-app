@@ -2,7 +2,7 @@
 
 /**
  * Baut die App-Icons aus den Original-Icons der Seite (build/source/):
- *   build/icon.ico  – Windows, mehrere Grössen in einer Datei
+ *   build/icon.ico  – Windows, mehrere Größen in einer Datei
  *   build/icon.png  – Master für macOS (.icns) und Linux, erzeugt electron-builder daraus
  * Läuft unter Electron, weil nativeImage das Skalieren übernimmt:
  *   npm run icon
@@ -18,7 +18,7 @@ const SOURCE_DIR = path.join(__dirname, '..', 'build', 'source');
 const OUT = path.join(__dirname, '..', 'build', 'icon.ico');
 
 // electron-builder verlangt für macOS mindestens 512 px; 1024 ist die übliche
-// Kantenlänge eines icns-Masters. Das grösste Original ist 310 px, wird also
+// Kantenlänge eines icns-Masters. Das größte Original ist 310 px, wird also
 // hochgerechnet.
 const PNG_OUT = path.join(__dirname, '..', 'build', 'icon.png');
 const PNG_SIZE = 1024;
@@ -49,7 +49,7 @@ function loadSources() {
   return sources;
 }
 
-/** Exakte Grösse bevorzugen, sonst vom nächstgrösseren Original herunterrechnen. */
+/** Exakte Größe bevorzugen, sonst vom nächstgrößeren Original herunterrechnen. */
 function pickSource(sources, target) {
   return (
     sources.find((s) => s.size === target) ||

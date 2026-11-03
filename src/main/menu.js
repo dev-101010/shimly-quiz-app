@@ -71,49 +71,54 @@ function template(actions) {
   const viewMenu = {
     label: t.view,
     submenu: [
-      item(t.reload, 'F5', actions.reload),
-      // Ein Menuepunkt zeigt nur ein Kuerzel – hier das kuerzere. Unter macOS
+      // macOS-Tastaturen haben meist kein F5 – dort Cmd+R, wie in der Hilfe.
+      item(t.reload, isMac ? 'Cmd+R' : 'F5', actions.reload),
+      // Ein Menüpunkt zeigt nur ein Kürzel – hier das kürzere. Unter macOS
       // gibt es Strg+F5 nicht, dort bleibt Cmd+Umschalt+R.
       item(t.hardReload, isMac ? 'Cmd+Shift+R' : 'Ctrl+F5', actions.hardReload),
       { type: 'separator' },
       item(t.back, isMac ? 'Cmd+Left' : 'Alt+Left', actions.back),
       { type: 'separator' },
-      // "CmdOrCtrl++" laesst sich nicht zerlegen – nach dem Trennen am Plus
-      // bleibt kein Tastenname uebrig, und das Kuerzel wird gar nicht angezeigt.
+      // "CmdOrCtrl++" lässt sich nicht zerlegen – nach dem Trennen am Plus
+      // bleibt kein Tastenname übrig, und das Kürzel wird gar nicht angezeigt.
       item(t.zoomIn, 'CmdOrCtrl+Plus', actions.zoomIn),
       item(t.zoomOut, 'CmdOrCtrl+-', actions.zoomOut),
       item(t.zoomReset, 'CmdOrCtrl+0', actions.zoomReset),
       { type: 'separator' },
       // F11 gibt es unter macOS nicht als Vollbild – dort ist es Ctrl+Cmd+F.
       item(t.fullscreen, isMac ? 'Control+Cmd+F' : 'F11', actions.fullscreen),
-      // Die Entwicklerwerkzeuge stehen bewusst nicht im Menue: fuer normale
+      // Die Entwicklerwerkzeuge stehen bewusst nicht im Menü: für normale
       // Nutzung sind sie ohne Wert. Die Taste bleibt, siehe attachShortcuts
       // in main.js, dokumentiert ist sie nur in der README.
     ],
   };
 
-  // Bewusst ohne "Fenster schliessen": Cmd+W/Strg+W wird abgefangen, damit
+  // Bewusst ohne "Fenster schließen": Cmd+W/Strg+W wird abgefangen, damit
   // niemand mitten im Quiz das Fenster wegklickt.
   const windowMenu = {
     label: t.window,
     submenu: [{ role: 'minimize', label: t.minimize }],
   };
 
+  // Unter macOS markiert role 'help' das Menü als Hilfe-Menü (mit Suchfeld).
+  // "Über" steht dort schon im App-Menü und fehlt hier deshalb.
   const helpMenu = {
     label: t.help,
+    ...(isMac ? { role: 'help' } : {}),
     submenu: [
-      // Jede Plattform ihre uebliche Taste: F1 unter Windows und Linux,
+      // Jede Plattform ihre übliche Taste: F1 unter Windows und Linux,
       // Cmd+? unter macOS.
       item(t.helpPage, isMac ? 'Cmd+?' : 'F1', actions.help),
       { type: 'separator' },
       { label: t.report, click: actions.report },
       { label: t.project, click: actions.project },
-      { type: 'separator' },
-      { label: about, click: actions.about },
+      ...(isMac ? [] : [{ type: 'separator' }, { label: about, click: actions.about }]),
     ],
   };
 
-  return isMac ? [appMenu, editMenu, viewMenu, windowMenu] : [fileMenu, viewMenu, helpMenu];
+  return isMac
+    ? [appMenu, editMenu, viewMenu, windowMenu, helpMenu]
+    : [fileMenu, viewMenu, helpMenu];
 }
 
 function install(actions) {

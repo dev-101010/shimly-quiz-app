@@ -2,8 +2,8 @@
 
 Native Desktop-App mit eingebettetem Chromium (Electron) für Windows, Linux und
 macOS, fest verdrahtet auf <https://www.shimly-quiz.de/>. Inoffizieller Client:
-der Fenstertitel lautet durchgehend „Shimly Quiz (Third Party)" und wird vom
-Seitentitel nicht überschrieben. Alles Dateisystemseitige heisst schlicht
+der Fenstertitel lautet durchgehend „Shimly Quiz (Third Party)“ und wird vom
+Seitentitel nicht überschrieben. Alles Dateisystemseitige heißt schlicht
 `Shimly_Quiz`.
 
 ## Starten & Bauen
@@ -14,6 +14,7 @@ npm start            # App starten
 npm run dev          # mit DevTools
 npm run icon:fetch   # Original-Icons von der Seite nach build/source/ laden
 npm run icon         # daraus build/icon.ico + build/icon.png bauen
+npm run check:i18n   # prüfen, dass Deutsch und Englisch vollständig sind
 npm run dist         # Windows-Builds nach dist/
 npm run dist:linux   # Linux-Builds  (nur auf Linux/WSL/Docker)
 npm run dist:mac     # macOS-Builds  (nur auf macOS)
@@ -44,8 +45,8 @@ gibt es deshalb nicht mehr: Es wäre nur für automatische Updates über
 `electron-updater` nötig, das hier niemand nutzt, hätte aber als einzige Datei
 ohne erkennbare Plattform dagestanden.
 
-Dateien, Ordner und Verknüpfungen heissen durchgehend `Shimly_Quiz`; der Zusatz
-„(Third Party)" steht ausschliesslich im Fenstertitel.
+Dateien, Ordner und Verknüpfungen heißen durchgehend `Shimly_Quiz`; der Zusatz
+„(Third Party)“ steht ausschließlich im Fenstertitel.
 
 ## Builds über GitHub Actions
 
@@ -72,7 +73,7 @@ Die Builds sind **unsigniert**. Ein selbstsigniertes Zertifikat brachte in der
 Praxis nichts: gültig nur auf Rechnern, die es kennen, und SmartScreen warnt
 trotzdem weiter. Was Nutzer stattdessen sehen:
 
-- **Windows** — SmartScreen meldet „Unbekannter Herausgeber": *Weitere
+- **Windows** — SmartScreen meldet „Unbekannter Herausgeber“: *Weitere
   Informationen* → *Trotzdem ausführen*.
 - **Linux** — keine Signaturprüfung, AppImage nur ausführbar machen
   (`chmod +x`).
@@ -92,27 +93,27 @@ Ohne Warnungen geht es nur mit einem Zertifikat einer öffentlichen CA
 Das App-Icon stammt aus den Original-Assets von shimly-quiz.de. `npm run
 icon:fetch` lädt die dort veröffentlichten PNGs (16 – 310 px) nach
 `build/source/`; `npm run icon` baut daraus zwei Dateien und nimmt für jede
-Grösse das nächstgrössere Original als Vorlage:
+Größe das nächstgrößere Original als Vorlage:
 
-- `build/icon.ico` — Windows, sieben Grössen in einer Datei
+- `build/icon.ico` — Windows, sieben Größen in einer Datei
 - `build/icon.png` — 1024 px, Master für macOS (`.icns`) und Linux;
   electron-builder rechnet daraus die jeweiligen Formate
 - `src/renderer/icon.png` — 256 px, Fenster-Icon. Liegt unter `src/`, weil
   `build/` nur Build-Ressource ist und nicht mitgeliefert wird; so zeigt auch
   ein `npm start` aus dem Quellordner das richtige Icon statt dem von Electron
 
-Das grösste verfügbare Original ist 310 px (`ms-icon-310x310.png`), das
+Das größte verfügbare Original ist 310 px (`ms-icon-310x310.png`), das
 1024-px-Master wird also hochgerechnet und ist entsprechend weich. Schärfer
-wird es nur mit einer grösseren Vorlage — die Seite liefert keine. Beide
+wird es nur mit einer größeren Vorlage — die Seite liefert keine. Beide
 Dateien liegen im Repo, damit die GitHub-Runner sie nicht selbst erzeugen
 müssen. Der Lade- und Fehlerbildschirm nutzt dasselbe Motiv
 (`src/renderer/logo.png`).
 
-## Was „gaming-optimiert" hier heisst
+## Was „gaming-optimiert“ hier heißt
 
 Ziel ist das Verhalten eines normalen Spiels: Verbindung und Logik laufen im
 Hintergrund weiter, nur die Darstellung darf sparen. Ein Browser-Tab wird
-minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
+minimiert gedrosselt und reißt dabei gern Live-Verbindungen ab — hier nicht.
 
 | Bereich | Umsetzung |
 | --- | --- |
@@ -132,14 +133,16 @@ minimiert gedrosselt und reisst dabei gern Live-Verbindungen ab — hier nicht.
 | `Esc` | Vollbild verlassen |
 | `F5` / `Ctrl+R` | Neu laden |
 | `Ctrl+F5` / `Shift+F5` / `Ctrl+Shift+R` | Neu laden ohne Zwischenspeicher |
-| `Ctrl` `+` / `-` / `0` | Zoom grösser / kleiner / zurücksetzen |
+| `Ctrl` `+` / `-` / `0` | Zoom größer / kleiner / zurücksetzen |
 | `Alt+←` | Zurück |
 | `F1` | Hilfe |
 | `F2` / `Ctrl+,` | Einstellungen |
 | `Ctrl+Shift+I` | DevTools — bewusst nirgends in der App genannt |
 
 Auf macOS liegen dieselben Kürzel auf `Cmd` statt `Ctrl`, und Zurück ist
-`Cmd+←`. Zwei Ausnahmen, weil `Cmd` dort nicht die Konvention ist:
+`Cmd+←` — außer in Textfeldern, wo es wie gewohnt an den Zeilenanfang springt.
+Das entscheidet deshalb [`src/main/preload.js`](src/main/preload.js), das den
+Fokus kennt. Zwei Ausnahmen, weil `Cmd` dort nicht die Konvention ist:
 
 | Taste (macOS) | Funktion |
 | --- | --- |
@@ -147,7 +150,7 @@ Auf macOS liegen dieselben Kürzel auf `Cmd` statt `Ctrl`, und Zurück ist
 | `Ctrl+Cmd+F` | Vollbild — `F11` liegt dort auf Mission Control |
 | `Cmd+Alt+I` | DevTools — `Alt` statt `Shift`, wie in Safari und Chrome |
 
-Ebenfalls macOS-typisch: Das Schliessen des Fensters beendet die App nicht —
+Ebenfalls macOS-typisch: Das Schließen des Fensters beendet die App nicht —
 dafür `Cmd+Q`.
 
 Die Kürzel wertet durchgehend `attachShortcuts` in
@@ -160,23 +163,28 @@ Menüpunkte zeigen ihr Kürzel deshalb nur an und registrieren es nicht
 
 - **Feste Seite:** Nur `shimly-quiz.de` und `www.shimly-quiz.de` laden im
   Fenster. Jeder andere Link — und jedes `target="_blank"` — geht in den
-  Standardbrowser. Downloads ebenso.
+  Standardbrowser, ebenso Weiterleitungen auf fremde Hosts und Downloads.
+  Fremde Seiten in iframes werden gar nicht geladen; Bilder, Skripte und
+  Schriften von anderen Hosts (CDNs) dagegen schon, sonst bräche die Seite.
 - **Angemeldet bleiben:** Cookies und LocalStorage liegen in der Partition
   `persist:shimly` und überleben Neustarts.
 - **Eine Instanz:** Ein zweiter Start holt das vorhandene Fenster nach vorn.
 - **Offline:** Schlägt das Laden fehl, erscheint eine Fehlerseite mit
-  „Erneut versuchen". Stürzt der Renderer ab, lädt die App selbstständig neu.
-- **Fenster:** Grösse, Position und Maximiert-Status werden gemerkt.
+  „Erneut versuchen“. Stürzt der Renderer ab, lädt die App selbstständig neu;
+  stürzt er innerhalb von 30 Sekunden erneut ab, erscheint stattdessen die
+  Fehlerseite.
+- **Fenster:** Größe, Position und Maximiert-Status werden gemerkt.
 - **Sicherheit:** `contextIsolation` an, `nodeIntegration` aus, Sandbox an,
-  `<webview>` blockiert. Der Seite stehen nur `retry()` und `quit()` zur
-  Verfügung. Rechte ausser Vollbild, Pointer-Lock und Mikrofon/Kamera werden
-  abgelehnt.
+  `<webview>` blockiert. shimly-quiz.de bekommt keinerlei Brücke; `retry()`
+  und `quit()` gibt es nur auf der eigenen Lade-/Fehlerseite. Vollbild,
+  Pointer-Lock, Mikrofon/Kamera und Schreiben in die Zwischenablage sind nur
+  für shimly-quiz.de erlaubt, alle anderen Rechte werden abgelehnt.
+  An den Systembrowser gehen nur `http(s):`- und `mailto:`-Adressen.
 
 ## Einstellungen
 
-Über **Datei → Einstellungen…** (bzw. `Strg+,`) öffnet sich ein eigenes Fenster
-mit allen Optionen, den Aufräumaktionen und dem Pfad zur `settings.json` samt
-Knopf, der den Ordner öffnet.
+Über **Datei → Einstellungen** (bzw. `F2` oder `Strg+,`, unter macOS `Cmd+,`)
+öffnet sich ein eigenes Fenster mit allen Optionen und den Aufräumaktionen.
 
 Die **Entwicklerwerkzeuge** stehen weder im Menü noch auf der Hilfeseite. Für
 normale Nutzung haben sie keinen Wert und stiften nur Verwirrung; die
@@ -188,7 +196,7 @@ Eigenheiten, die man der App nicht ansieht: dass fremde Links im Systembrowser
 aufgehen, dass die Anmeldung Neustarts überlebt, was bei veralteten Inhalten
 hilft und warum beim ersten Start eine Warnung erscheint. Die Kürzel erzeugt
 der Hauptprozess passend zur Plattform, sie stehen nicht fest im Markup.
-Daneben führt das Menü zum Forum-Thread („Problem melden") und zur
+Daneben führt das Menü zum Forum-Thread („Problem melden“) und zur
 Projektseite.
 
 Reine Angaben zum Programm stehen getrennt davon unter **Hilfe → Über** (unter
@@ -199,14 +207,14 @@ im Über-Fenster gibt es nichts zu drehen.
 
 Die Menüleiste ist dauerhaft sichtbar und verschwindet nur im Vollbild. Unter
 macOS liegt das Menü in der Systemleiste; dort ist es Pflicht, weil sonst
-`Cmd+Q` und Kopieren/Einfügen nicht funktionieren. Einen Punkt zum Schliessen
+`Cmd+Q` und Kopieren/Einfügen nicht funktionieren. Einen Punkt zum Schließen
 des Fensters gibt es bewusst nicht, passend dazu, dass `Strg+W` abgefangen
 wird.
 
 Änderungen wirken sofort, mit zwei Ausnahmen: `startFullscreen` gilt ab dem
 nächsten Start, und die beiden Chromium-Schalter (`uncapFrameRate`,
 `disableHardwareAcceleration`) stehen beim Programmstart fest. Werden sie
-geändert, blendet der Dialog einen Hinweis samt „Jetzt neu starten" ein — und
+geändert, blendet der Dialog einen Hinweis samt „Jetzt neu starten“ ein — und
 zwar so lange, bis der Prozess wirklich neu gestartet wurde.
 
 Unter **Daten** stehen zwei Aufräumaktionen, bewusst getrennt:
@@ -214,12 +222,12 @@ Unter **Daten** stehen zwei Aufräumaktionen, bewusst getrennt:
 - **Zwischenspeicher leeren** — bei hängenden Bildern oder veralteten
   Skripten. Räumt zwei getrennte Töpfe: den HTTP-Cache und `cachestorage`,
   aus dem der Service Worker der Seite seine Dateien ausliefert. Der zweite
-  ist der weitaus grössere; ohne ihn bliebe die Seite trotz „geleert" auf
+  ist der weitaus größere; ohne ihn bliebe die Seite trotz „geleert“ auf
   altem Stand. Die Anmeldung bleibt bestehen.
 - **Alle Daten löschen** — entfernt zusätzlich Cookies, LocalStorage,
   IndexedDB und Service Worker der Partition `persist:shimly`. Das meldet ab,
-  fragt deshalb vorher nach und lädt die Seite anschliessend neu. Die
-  `settings.json` bleibt unberührt, die liegt ausserhalb der Session.
+  fragt deshalb vorher nach und lädt die Seite anschließend neu. Die
+  `settings.json` bleibt unberührt, die liegt außerhalb der Session.
 
 Nicht im Dialog steht `blockContextMenu`. Das Rechtsklick-Menü zu erlauben ist
 kein Fall für den Alltag, sondern eine Ausnahme — wer sie braucht, ändert den
@@ -251,6 +259,9 @@ Die Datei wird beim ersten Start angelegt:
   Runde nicht in den Standby gehen soll
 - `disableHardwareAcceleration` — Notausgang bei GPU-Treiberproblemen
 
+Von Hand eingetragene Werte mit falschem Typ (etwa `"zoomFactor": "1.5"` als
+Text) werden ignoriert, der Zoom wird auf 40–300 % begrenzt.
+
 ## Sprache
 
 Die Oberfläche richtet sich nach der Systemsprache: Deutsch auf deutschsprachigen
@@ -258,18 +269,19 @@ Systemen, sonst Englisch. Entschieden wird das einmal beim Start über
 `app.getSystemLocale()` in [`src/main/i18n.js`](src/main/i18n.js) — dort liegen
 beide Wörterbücher, und sie sind die einzige Quelle für sichtbare Texte.
 
-Menü und Fenstertitel baut der Hauptprozess direkt daraus. Die beiden HTML-Seiten
+Menü und Fenstertitel baut der Hauptprozess direkt daraus. Die vier HTML-Seiten
 enthalten selbst keinen Text mehr, sondern nur `data-t`-Platzhalter; sie holen
 sich das Wörterbuch synchron über den Kanal `app:strings` und füllen die
 Elemente, bevor das Fenster sichtbar wird. Deshalb springt beim Öffnen nichts um.
 
 Unverändert in beiden Sprachen bleibt der Fenstertitel „Shimly Quiz
-(Third Party)" — er ist Kennzeichnung, keine Beschriftung.
+(Third Party)“ — er ist Kennzeichnung, keine Beschriftung.
 
 Eine weitere Sprache ergänzen: Wörterbuch nach dem Muster von `de`/`en` anlegen
-und in `strings()` auf das Kürzel abbilden. Dass keine Übersetzung fehlt, lässt
-sich über `i18n.dictionaries` prüfen — beide Objekte müssen dieselben Schlüssel
-führen (aktuell je 64).
+und in `strings()` auf das Kürzel abbilden. Dass keine Übersetzung fehlt, prüft
+`npm run check:i18n` (auch im CI-Build): Alle Wörterbücher müssen dieselben
+Schlüssel führen (aktuell je 105), und jeder `data-t`-Platzhalter braucht einen
+Text.
 
 ## Projektstruktur
 
@@ -295,6 +307,7 @@ src/renderer/logo.png        Motiv für beide Seiten
 src/renderer/icon.png        Fenster-Icon (256 px)
 scripts/fetch-icons.js       lädt die Original-Icons nach build/source/
 scripts/make-icon.js         baut daraus icon.ico + icon.png (unter Electron)
+scripts/check-i18n.js        prüft die Wörterbücher auf Vollständigkeit
 build/source/                Original-PNGs von shimly-quiz.de
 .github/workflows/           CI-Build für Windows, Linux und macOS
 ```

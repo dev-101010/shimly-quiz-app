@@ -12,6 +12,7 @@
     "dev": "set ELECTRON_RUN_AS_NODE=&& electron . --dev",
     "icon": "set ELECTRON_RUN_AS_NODE=&& electron scripts/make-icon.js",
     "icon:fetch": "node scripts/fetch-icons.js",
+    "check:i18n": "node scripts/check-i18n.js",
     "dist": "electron-builder --win",
     "dist:linux": "electron-builder --linux",
     "dist:mac": "electron-builder --mac",

@@ -38,13 +38,13 @@ function shortcuts() {
     { groups: [isMac ? [mod, t.keyComma] : ['F2']], text: t.scSettings },
     { groups: isMac ? [['Ctrl', 'Cmd', 'F']] : [['F11']], text: t.scFullscreen },
     { groups: [['Esc']], text: t.scExitFullscreen },
-    // Ein Kuerzel je Zeile. Strg+R geht weiterhin, steht aber nur in der README.
+    // Ein Kürzel je Zeile. Strg+R geht weiterhin, steht aber nur in der README.
     { groups: [isMac ? [mod, 'R'] : ['F5']], text: t.scReload },
-    // Nur das kuerzere Kuerzel, wie im Menue. Strg+Umschalt+R funktioniert
+    // Nur das kürzere Kürzel, wie im Menü. Strg+Umschalt+R funktioniert
     // weiterhin und steht in der README.
     { groups: [isMac ? [mod, shift, 'R'] : [mod, 'F5']], text: t.scHardReload },
     // Bewusst drei Zeilen: als "Strg + Plus / Minus / 0" sieht es aus, als
-    // kaemen Minus und 0 ohne die Modifikatortaste aus.
+    // kämen Minus und 0 ohne die Modifikatortaste aus.
     { groups: [[mod, t.keyPlus]], text: t.scZoomIn },
     { groups: [[mod, t.keyMinus]], text: t.scZoomOut },
     { groups: [[mod, '0']], text: t.scZoomReset },

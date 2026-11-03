@@ -22,8 +22,8 @@ if (!app) {
   // Passiert nur, wenn ELECTRON_RUN_AS_NODE gesetzt ist (z. B. im VSCode-Terminal):
   // electron.exe startet dann als reines Node und hat keine Fenster-APIs.
   console.error(
-    'Electron laeuft im Node-Modus (ELECTRON_RUN_AS_NODE ist gesetzt).\n' +
-      'Loesung: in dieser Shell "Remove-Item Env:ELECTRON_RUN_AS_NODE" ausfuehren\n' +
+    'Electron läuft im Node-Modus (ELECTRON_RUN_AS_NODE ist gesetzt).\n' +
+      'Lösung: in dieser Shell "Remove-Item Env:ELECTRON_RUN_AS_NODE" ausführen\n' +
       'oder "npm start" statt "electron ." verwenden.',
   );
   process.exit(1);
@@ -31,7 +31,10 @@ if (!app) {
 
 const isDev = process.argv.includes('--dev');
 const isMac = process.platform === 'darwin';
-const cfg = config.load();
+
+// Bewusst keine dauerhafte Kopie der Einstellungen: config.save() legt jedes
+// Mal ein neues Objekt an, eine hier gemerkte Kopie bliebe auf dem Stand des
+// Programmstarts stehen. Deshalb überall config.load().
 
 const SPLASH = path.join(__dirname, '..', 'renderer', 'splash.html');
 const ICON = path.join(__dirname, '..', 'renderer', 'icon.png');
@@ -41,10 +44,16 @@ let mainWindow = null;
 let powerBlockerId = null;
 let saveTimer = null;
 
+/** Systembrowser, aber nur für unbedenkliche Schemata (siehe config.js). */
+function openExternal(url) {
+  if (config.isSafeExternalUrl(url)) shell.openExternal(url).catch(() => {});
+}
+
 /* ------------------------------------------------------------------ *
  * Chromium-Schalter — müssen vor app.whenReady() gesetzt werden.
  * ------------------------------------------------------------------ */
 function applyChromiumFlags() {
+  const cfg = config.load();
   const sw = app.commandLine.appendSwitch.bind(app.commandLine);
 
   if (cfg.disableHardwareAcceleration) {
@@ -79,7 +88,7 @@ function applyChromiumFlags() {
  * Fensterposition merken (auf sichtbaren Bildschirm geklemmt).
  * ------------------------------------------------------------------ */
 function sanitizedBounds() {
-  const { width, height, x, y } = cfg.window;
+  const { width, height, x, y } = config.load().window;
   const bounds = {
     width: Math.max(800, width),
     height: Math.max(600, height),
@@ -115,23 +124,37 @@ function schedulePersist() {
  * Session: Rechte, Downloads, Fremd-Navigation.
  * ------------------------------------------------------------------ */
 function configureSession(ses) {
-  // Vollbild/Pointer-Lock/Audio erlauben, den Rest nicht.
+  // Vollbild, Pointer-Lock, Mikrofon/Kamera und Schreiben in die
+  // Zwischenablage erlauben, den Rest nicht – und nur für shimly-quiz.de
+  // selbst. Auf der eigenen Lade-/Fehlerseite gibt es nichts.
   const allowed = new Set(['fullscreen', 'pointerLock', 'media', 'clipboard-sanitized-write']);
-  ses.setPermissionRequestHandler((_wc, permission, callback) => {
-    callback(allowed.has(permission));
+  ses.setPermissionRequestHandler((_wc, permission, callback, details) => {
+    callback(allowed.has(permission) && config.isAllowedUrl(details.requestingUrl));
   });
-  ses.setPermissionCheckHandler((_wc, permission) => allowed.has(permission));
+  ses.setPermissionCheckHandler(
+    (_wc, permission, requestingOrigin) =>
+      allowed.has(permission) && config.isAllowedUrl(requestingOrigin),
+  );
+
+  // Fremde Seiten in iframes gar nicht erst laden. Über webRequest statt über
+  // Navigationsereignisse, weil das auch das erste Laden eines iframes und
+  // Weiterleitungen darin erfasst. Bilder, Skripte usw. von anderen Hosts
+  // (CDNs) sind davon nicht betroffen, nur ganze eingebettete Seiten.
+  ses.webRequest.onBeforeRequest({ urls: ['http://*/*', 'https://*/*'] }, (details, callback) => {
+    const foreignFrame = details.resourceType === 'subFrame' && !config.isAllowedUrl(details.url);
+    callback({ cancel: foreignFrame });
+  });
 
   ses.on('will-download', (event, item) => {
     event.preventDefault();
-    shell.openExternal(item.getURL()).catch(() => {});
+    openExternal(item.getURL());
   });
 }
 
 function hardenNavigation(contents) {
   // Links auf fremde Ziele im Systembrowser öffnen, nicht in der App.
   contents.setWindowOpenHandler(({ url }) => {
-    if (/^https?:/i.test(url)) shell.openExternal(url).catch(() => {});
+    openExternal(url);
     return { action: 'deny' };
   });
 
@@ -139,7 +162,16 @@ function hardenNavigation(contents) {
     if (url.startsWith('file://')) return; // eigene Splash-/Fehlerseite
     if (config.isAllowedUrl(url)) return;
     event.preventDefault();
-    shell.openExternal(url).catch(() => {});
+    openExternal(url);
+  });
+
+  // Leitet der Server auf einen fremden Host weiter, sieht will-navigate das
+  // nicht – das Ziel geht dann ebenfalls in den Systembrowser, und im Fenster
+  // bleibt die bisherige Seite stehen. iframes regelt configureSession.
+  contents.on('will-redirect', (event) => {
+    if (!event.isMainFrame || config.isAllowedUrl(event.url)) return;
+    event.preventDefault();
+    openExternal(event.url);
   });
 
   contents.on('will-attach-webview', (event) => event.preventDefault());
@@ -179,9 +211,11 @@ function attachShortcuts(win) {
     if (control && (k === '0' || k === 'numpad0')) return consume(() => setZoom(win, 1));
     if (control && (k === '+' || k === '=')) return consume(() => stepZoom(win, +0.1));
     if (control && (k === '-' || k === '_')) return consume(() => stepZoom(win, -0.1));
-    if (back && k === 'arrowleft') {
-      const history = win.webContents.navigationHistory;
-      if (history.canGoBack()) return consume(() => history.goBack());
+    // Unter macOS springt Cmd+← in Textfeldern an den Zeilenanfang. Dort
+    // entscheidet deshalb preload.js, das den Fokus kennt, und meldet sich
+    // über 'app:back'. Alt+← hat unter Windows/Linux in Feldern keine Bedeutung.
+    if (!isMac && back && k === 'arrowleft') {
+      if (win.webContents.navigationHistory.canGoBack()) return consume(() => goBack(win));
     }
     // DevTools: Windows/Linux Ctrl+Shift+I, macOS Cmd+Alt+I. F12 fehlt
     // absichtlich – zu leicht versehentlich getroffen für etwas, das normale
@@ -205,8 +239,11 @@ function attachShortcuts(win) {
 
 function setFullScreen(win, on) {
   win.setFullScreen(on);
-  // Im Vollbild stört die Menüleiste; danach muss sie wieder auftauchen.
-  win.setMenuBarVisibility(!on);
+}
+
+function goBack(win) {
+  const history = win.webContents.navigationHistory;
+  if (history.canGoBack()) history.goBack();
 }
 
 function reload(win, hard) {
@@ -215,7 +252,7 @@ function reload(win, hard) {
 }
 
 function setZoom(win, factor) {
-  const clamped = Math.min(3, Math.max(0.4, Number(factor.toFixed(2))));
+  const clamped = config.clampZoom(factor);
   win.webContents.setZoomFactor(clamped);
   settingsWindow.notifyChanged(config.save({ zoomFactor: clamped }));
 }
@@ -238,14 +275,11 @@ function installMenu() {
     settings: onMain((win) => settingsWindow.open(win)),
     about: onMain((win) => aboutWindow.open(win)),
     help: onMain((win) => helpWindow.open(win)),
-    report: () => shell.openExternal(config.FORUM_URL).catch(() => {}),
-    project: () => shell.openExternal(config.REPO_URL).catch(() => {}),
+    report: () => openExternal(config.FORUM_URL),
+    project: () => openExternal(config.REPO_URL),
     reload: onMain((win) => reload(win, false)),
     hardReload: onMain((win) => reload(win, true)),
-    back: onMain((win) => {
-      const history = win.webContents.navigationHistory;
-      if (history.canGoBack()) history.goBack();
-    }),
+    back: onMain(goBack),
     zoomIn: onMain((win) => stepZoom(win, +0.1)),
     zoomOut: onMain((win) => stepZoom(win, -0.1)),
     zoomReset: onMain((win) => setZoom(win, 1)),
@@ -268,7 +302,13 @@ function showError(win, code, description) {
 /* ------------------------------------------------------------------ *
  * Fenster.
  * ------------------------------------------------------------------ */
+// Abstürze kurz hintereinander: nach dem zweiten innerhalb dieses Fensters
+// nicht mehr automatisch neu laden, sondern die Fehlerseite zeigen – sonst
+// dreht sich die App bei einem dauerhaft abstürzenden Renderer im Kreis.
+const CRASH_WINDOW_MS = 30000;
+
 function createWindow() {
+  const cfg = config.load();
   const ses = session.fromPartition(PARTITION);
   configureSession(ses);
 
@@ -295,8 +335,14 @@ function createWindow() {
   });
 
   // hardenNavigation läuft zentral über app.on('web-contents-created').
-  // Das Menü bleibt dank autoHideMenuBar eingeklappt und kommt erst auf Alt.
   attachShortcuts(win);
+
+  // Im Vollbild stört die Menüleiste; danach muss sie wieder auftauchen. Über
+  // die Ereignisse statt in setFullScreen, damit es auch für das Vollbild der
+  // Seite (Fullscreen-API) und für Vollbild direkt beim Start gilt.
+  if (cfg.startFullscreen) win.setMenuBarVisibility(false);
+  win.on('enter-full-screen', () => win.setMenuBarVisibility(false));
+  win.on('leave-full-screen', () => win.setMenuBarVisibility(true));
 
   // Der Fenstertitel bleibt der App-Titel; die Seite darf ihn nicht ersetzen.
   win.on('page-title-updated', (event) => event.preventDefault());
@@ -307,8 +353,10 @@ function createWindow() {
     win.focus();
   });
 
+  // Immer den aktuellen Wert setzen: Chromium merkt sich den Zoom je Host,
+  // und nach einem Wechsel z. B. über die Fehlerseite stimmt der nicht mehr.
   win.webContents.on('did-finish-load', () => {
-    if (cfg.zoomFactor !== 1) win.webContents.setZoomFactor(cfg.zoomFactor);
+    win.webContents.setZoomFactor(config.load().zoomFactor);
   });
 
   win.webContents.on('did-fail-load', (_e, code, description, url, isMainFrame) => {
@@ -317,7 +365,15 @@ function createWindow() {
     showError(win, code, description);
   });
 
-  win.webContents.on('render-process-gone', () => loadSite(win));
+  let lastCrash = 0;
+  win.webContents.on('render-process-gone', (_e, details) => {
+    if (win.isDestroyed()) return;
+    const now = Date.now();
+    const repeated = now - lastCrash < CRASH_WINDOW_MS;
+    lastCrash = now;
+    if (repeated) showError(win, details.reason, '');
+    else loadSite(win);
+  });
 
   win.on('resize', schedulePersist);
   win.on('move', schedulePersist);
@@ -327,7 +383,10 @@ function createWindow() {
   });
 
   // Ladebildschirm zuerst, damit kein weißes Fenster aufblitzt.
-  win.loadFile(SPLASH, { search: 'state=loading' }).then(() => loadSite(win));
+  win
+    .loadFile(SPLASH, { search: 'state=loading' })
+    .catch(() => {})
+    .then(() => loadSite(win));
 
   if (isDev) win.webContents.openDevTools({ mode: 'detach' });
 
@@ -337,14 +396,32 @@ function createWindow() {
 /* ------------------------------------------------------------------ *
  * IPC (aus der Splash-/Fehlerseite).
  * ------------------------------------------------------------------ */
+// Nur die eigene Lade-/Fehlerseite darf neu laden und beenden. preload.js
+// bietet die Brücke ohnehin nur dort an; das hier ist die zweite Sicherung.
+function fromOwnPage(event) {
+  return Boolean(event.senderFrame && event.senderFrame.url.startsWith('file://'));
+}
+
+function isMainWindowSender(event) {
+  return Boolean(mainWindow && !mainWindow.isDestroyed() && event.sender === mainWindow.webContents);
+}
+
 ipcMain.on('app:retry', (event) => {
+  if (!fromOwnPage(event)) return;
   const win = BrowserWindow.fromWebContents(event.sender);
   if (win) loadSite(win);
 });
 
-ipcMain.on('app:quit', () => app.quit());
+ipcMain.on('app:quit', (event) => {
+  if (fromOwnPage(event)) app.quit();
+});
 
-ipcMain.handle('app:context-menu-blocked', () => cfg.blockContextMenu);
+// Cmd+← unter macOS, siehe attachShortcuts und preload.js.
+ipcMain.on('app:back', (event) => {
+  if (isMainWindowSender(event)) goBack(mainWindow);
+});
+
+ipcMain.handle('app:context-menu-blocked', () => config.load().blockContextMenu);
 
 // Oberflächentexte für die Renderer. Bewusst synchron: so stehen die Texte
 // schon beim ersten Rendern fest und nichts springt sichtbar um.
@@ -369,7 +446,7 @@ function applySettings(patch, next) {
  *
  * Zwei getrennte Töpfe: `clearCache` räumt den HTTP-Cache, `cachestorage` ist
  * der Speicher der Cache-API, aus dem ein Service Worker seine Dateien
- * ausliefert. Der ist bei shimly-quiz.de der weitaus grössere — ohne ihn
+ * ausliefert. Der ist bei shimly-quiz.de der weitaus größere — ohne ihn
  * bliebe die Seite trotz "geleert" auf altem Stand.
  */
 async function clearCaches() {
@@ -381,7 +458,7 @@ async function clearCaches() {
 /**
  * Meldet ab und räumt die Partition leer: Cookies, LocalStorage, IndexedDB,
  * Service Worker und den Zwischenspeicher. Die settings.json bleibt unberührt,
- * die liegt ausserhalb der Session.
+ * die liegt außerhalb der Session.
  */
 async function clearBrowsingData() {
   const ses = session.fromPartition(PARTITION);
@@ -411,7 +488,11 @@ if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
   app.on('second-instance', () => {
-    if (!mainWindow) return;
+    // Unter macOS kann die App ohne Fenster im Dock weiterlaufen.
+    if (!mainWindow) {
+      if (app.isReady()) mainWindow = createWindow();
+      return;
+    }
     if (mainWindow.isMinimized()) mainWindow.restore();
     mainWindow.focus();
   });
@@ -444,7 +525,7 @@ if (!app.requestSingleInstanceLock()) {
     app.setAppUserModelId('de.shimly.quiz');
 
     installMenu();
-    setDisplaySleepBlocked(cfg.preventDisplaySleep);
+    setDisplaySleepBlocked(config.load().preventDisplaySleep);
 
     mainWindow = createWindow();
 

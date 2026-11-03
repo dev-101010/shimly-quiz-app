@@ -2,7 +2,7 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
-// Brücke ausschliesslich für das Über-Fenster (src/renderer/about.html).
+// Brücke ausschließlich für das Über-Fenster (src/renderer/about.html).
 // Beides synchron, damit die Seite fertig beschriftet erscheint.
 contextBridge.exposeInMainWorld('aboutApi', {
   t: ipcRenderer.sendSync('app:strings'),
