@@ -310,4 +310,25 @@ scripts/make-icon.js         baut daraus icon.ico + icon.png (unter Electron)
 scripts/check-i18n.js        prüft die Wörterbücher auf Vollständigkeit
 build/source/                Original-PNGs von shimly-quiz.de
 .github/workflows/           CI-Build für Windows, Linux und macOS
+LICENSE                      GPL-3.0, gilt nicht für Logo und Icons
 ```
+
+## Lizenz
+
+Copyright © 2026 Dennis Drochmann
+
+Der Quellcode steht unter der **GNU General Public License v3.0 oder neuer**
+(GPL-3.0-or-later), siehe [`LICENSE`](LICENSE). Er darf genutzt, verändert und
+weitergegeben werden — veränderte Fassungen aber nur wieder unter der GPL und
+mit offenem Quellcode.
+
+**Ausgenommen** sind Logo und Icons. Sie stammen von shimly-quiz.de, gehören
+deren Betreiber und fallen nicht unter die GPL:
+
+- `build/source/` (Originale)
+- `build/icon.ico`, `build/icon.png`
+- `src/renderer/icon.png`, `src/renderer/logo.png`
+
+Wer die App unabhängig von shimly-quiz.de weitergibt, muss sie durch eigene
+Grafiken ersetzen. „Shimly Quiz“ ist der Name der Seite; dieses Projekt ist
+ein inoffizieller Client und nicht mit ihrem Betreiber verbunden.
