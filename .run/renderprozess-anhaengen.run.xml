@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <!-- Hängt sich an die Seite und die Dialogfenster. Setzt voraus, dass die App
+       bereits mit --remote-debugging-port=9222 läuft (z. B. über "Hauptprozess"). -->
+  <configuration default="false" name="Renderprozess anhängen" type="ChromiumRemoteDebugType" factoryName="Chromium Remote" port="9222" restartOnDisconnect="true">
+    <method v="2" />
+  </configuration>
+</component>

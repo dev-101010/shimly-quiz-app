@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <!-- Startet electron.exe direkt (nicht electron.cmd), damit Stop den Prozess sauber beendet.
+       Der Debug-Port 9222 wird für „Renderprozess anhängen“ gebraucht. -->
+  <configuration default="false" name="Hauptprozess (mit DevTools)" type="NodeJSConfigurationType" path-to-node="$PROJECT_DIR$/node_modules/electron/dist/electron.exe" node-parameters=". --dev --remote-debugging-port=9222" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>

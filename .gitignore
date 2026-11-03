@@ -3,3 +3,4 @@ dist/
 build/cert/
 *.log
 *.pfx
+.idea/
